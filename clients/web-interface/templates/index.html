@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .service-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .service-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .service-url {
+            font-size: 0.9rem;
+            color: #666;
+            font-family: monospace;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎩 Gentleman AI</h1>
+            <p>Ihr intelligenter AI-Assistent</p>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3>💬 Chat Interface</h3>
+                <p>Sprechen Sie mit Ihrem AI-Assistenten über Text oder Sprache.</p>
+                <a href="/chat" class="btn">Chat starten</a>
+            </div>
+            
+            <div class="card">
+                <h3>📊 System Status</h3>
+                <p>Überwachen Sie den Status aller Microservices und Systemmetriken.</p>
+                <a href="/status" class="btn">Status anzeigen</a>
+            </div>
+            
+            <div class="card">
+                <h3>🎤 Spracherkennung</h3>
+                <p>Nutzen Sie die Whisper-basierte Spracherkennung für natürliche Interaktion.</p>
+                <button class="btn" onclick="alert('STT-Integration wird geladen...')">Mikrofon aktivieren</button>
+            </div>
+            
+            <div class="card">
+                <h3>🗣️ Sprachsynthese</h3>
+                <p>Lassen Sie sich Antworten vorlesen mit der integrierten Text-zu-Sprache Engine.</p>
+                <button class="btn" onclick="alert('TTS-Integration wird geladen...')">Sprache testen</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>🔧 Verfügbare Services</h3>
+            <p>Alle Microservices des Gentleman AI Systems:</p>
+            <div class="services-grid">
+                {% for name, url in services.items() %}
+                <div class="service-card">
+                    <div class="service-name">{{ name }}</div>
+                    <div class="service-url">{{ url }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🎩 Gentleman AI System - Powered by ROCm & PyTorch</p>
+        </div>
+    </div>
+</body>
+</html> 

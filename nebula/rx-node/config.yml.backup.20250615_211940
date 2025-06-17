@@ -1,0 +1,120 @@
+# 🎩 Gentleman RX Node Configuration (Arch Linux + RX 6700 XT)
+# ═══════════════════════════════════════════════════════════════
+# Optimiert für LLM Server mit GPU-Acceleration
+
+# 🔐 PKI Configuration
+pki:
+  ca: ca.crt
+  cert: rx-node.crt
+  key: rx-node.key
+
+# 🏠 Static Host Map (Lighthouse Discovery)
+static_host_map:
+  # Lighthouse Node - Update with actual public IP
+  "192.168.100.1": ["LIGHTHOUSE_PUBLIC_IP:4242"]
+
+# 🌐 Lighthouse Configuration
+lighthouse:
+  am_lighthouse: false
+  interval: 60
+  hosts:
+    - "192.168.100.1"
+
+# 🔊 Listen Configuration
+listen:
+  host: 0.0.0.0
+  port: 0  # Dynamic port assignment
+
+# 🥊 Punchy (NAT Traversal)
+punchy:
+  punch: true
+  respond: true
+  delay: 1s
+  respond_delay: 5s
+
+# 🌐 TUN Interface
+tun:
+  disabled: false
+  dev: nebula1
+  drop_local_broadcast: false
+  drop_multicast: false
+  tx_queue: 500
+  mtu: 1300
+  routes: []
+  unsafe_routes: []
+
+# 📝 Logging
+logging:
+  level: info
+  format: text
+  disable_timestamp: false
+  timestamp_format: "2006-01-02T15:04:05Z07:00"
+
+# 🔥 Firewall Configuration
+firewall:
+  # Connection Tracking
+  conntrack:
+    tcp_timeout: 12m
+    udp_timeout: 3m
+    default_timeout: 10m
+    max_connections: 100000
+
+  # Outbound Rules (Allow all outbound)
+  outbound:
+    - port: any
+      proto: any
+      host: any
+
+  # Inbound Rules (Selective access)
+  inbound:
+    # Allow ICMP (ping)
+    - port: any
+      proto: icmp
+      host: any
+
+    # Allow SSH (secure access)
+    - port: 22
+      proto: tcp
+      host: any
+
+    # Allow LLM Server API
+    - port: 8000-8010
+      proto: tcp
+      host: any
+      groups:
+        - audio-services
+        - clients
+        - monitoring
+
+    # Allow Docker API (internal)
+    - port: 2375-2376
+      proto: tcp
+      host: any
+      groups:
+        - monitoring
+
+    # Allow Prometheus metrics
+    - port: 9090-9100
+      proto: tcp
+      host: any
+      groups:
+        - monitoring
+
+    # Allow Matrix communication
+    - port: 8448
+      proto: tcp
+      host: any
+      groups:
+        - matrix-nodes
+
+    # Allow internal mesh communication
+    - port: 4242
+      proto: udp
+      host: any
+
+# 🎯 RX Node Specific Settings
+# Node Role: LLM Server
+# Hardware: AMD Ryzen 5 1600 + RX 6700 XT
+# Services: llm-server, monitoring, matrix-updates
+# IP: 192.168.100.10/24
+# Groups: llm-servers, gpu-nodes 

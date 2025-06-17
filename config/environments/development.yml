@@ -1,0 +1,26 @@
+# 🎩 Gentleman Development Configuration
+gentleman:
+  debug: true
+  log_level: DEBUG
+  
+services:
+  llm-server:
+    host: "172.20.1.10"
+    port: 8000
+    gpu_enabled: true
+    
+  stt-service:
+    host: "172.20.1.20"
+    port: 8000
+    model: "large-v3"
+    language: "de"
+    
+  tts-service:
+    host: "172.20.1.30"
+    port: 8000
+    voice_model: "coqui-tts"
+    emotion_enabled: true
+
+mesh:
+  lighthouse: "192.168.100.1"
+  port: 4242

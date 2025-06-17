@@ -1,0 +1,142 @@
+# 🎩 GENTLEMAN - TrueNAS Integration
+# ═══════════════════════════════════════════════════════════════
+# TrueNAS SCALE Integration für Gentleman Distributed AI Pipeline
+
+truenas:
+  # TrueNAS Server Configuration
+  server:
+    host: "truenas.local"
+    port: 443
+    protocol: "https"
+    api_version: "v2.0"
+    
+  # Authentication
+  auth:
+    api_key: "${TRUENAS_API_KEY}"
+    username: "${TRUENAS_USERNAME}"
+    
+  # Storage Configuration
+  storage:
+    # Gentleman Models Dataset
+    models_dataset: "gentleman/models"
+    models_path: "/mnt/gentleman/models"
+    
+    # Voice Data Dataset  
+    voices_dataset: "gentleman/voices"
+    voices_path: "/mnt/gentleman/voices"
+    
+    # Logs Dataset
+    logs_dataset: "gentleman/logs"
+    logs_path: "/mnt/gentleman/logs"
+    
+    # Backup Dataset
+    backup_dataset: "gentleman/backups"
+    backup_path: "/mnt/gentleman/backups"
+    
+  # Apps Integration (TrueNAS SCALE Apps)
+  apps:
+    # Gentleman Services als TrueNAS Apps
+    gentleman_llm:
+      name: "gentleman-llm-server"
+      namespace: "gentleman"
+      chart: "custom-app"
+      values:
+        image: "gentleman/llm-server:latest"
+        resources:
+          limits:
+            memory: "16Gi"
+            nvidia.com/gpu: 1
+          requests:
+            memory: "8Gi"
+        volumes:
+          - name: "models"
+            dataset: "gentleman/models"
+            mountPath: "/app/models"
+          - name: "logs"
+            dataset: "gentleman/logs"
+            mountPath: "/app/logs"
+            
+    # Prometheus für Monitoring
+    prometheus:
+      name: "gentleman-prometheus"
+      namespace: "monitoring"
+      chart: "prometheus"
+      values:
+        persistence:
+          enabled: true
+          dataset: "gentleman/monitoring/prometheus"
+          
+    # Grafana Dashboard
+    grafana:
+      name: "gentleman-grafana"
+      namespace: "monitoring"
+      chart: "grafana"
+      values:
+        persistence:
+          enabled: true
+          dataset: "gentleman/monitoring/grafana"
+          
+  # Network Configuration
+  network:
+    # Nebula Mesh Integration
+    nebula:
+      interface: "nebula-gentleman"
+      ip: "192.168.100.5"  # TrueNAS Node IP
+      lighthouse: "192.168.100.1"
+      
+    # Port Forwarding für Services
+    port_forwarding:
+      - service: "gentleman-llm"
+        internal_port: 8001
+        external_port: 8001
+      - service: "prometheus"
+        internal_port: 9090
+        external_port: 9090
+      - service: "grafana"
+        internal_port: 3000
+        external_port: 3001  # Avoid conflict with HA
+        
+  # Backup Configuration
+  backup:
+    # Automated Backups
+    schedule: "0 2 * * *"  # Daily at 2 AM
+    retention: 30  # Keep 30 days
+    
+    # Backup Targets
+    targets:
+      - type: "local"
+        path: "/mnt/gentleman/backups/local"
+      - type: "cloud"
+        provider: "s3"
+        bucket: "${BACKUP_S3_BUCKET}"
+        
+  # Monitoring Integration
+  monitoring:
+    # SNMP für TrueNAS Metriken
+    snmp:
+      enabled: true
+      community: "${SNMP_COMMUNITY}"
+      
+    # Syslog Integration
+    syslog:
+      enabled: true
+      facility: "local0"
+      
+  # Security
+  security:
+    # SSL Certificates
+    ssl:
+      enabled: true
+      cert_path: "/etc/ssl/gentleman/"
+      
+    # Firewall Rules
+    firewall:
+      rules:
+        - name: "gentleman-llm"
+          port: 8001
+          protocol: "tcp"
+          source: "192.168.100.0/24"
+        - name: "nebula-mesh"
+          port: 4242
+          protocol: "udp"
+          source: "any" 

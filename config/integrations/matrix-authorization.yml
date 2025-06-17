@@ -1,0 +1,202 @@
+# 🎩 GENTLEMAN - Matrix Authorization System
+# ═══════════════════════════════════════════════════════════════
+# Matrix-basierte Autorisierung für Aktualisierungspipeline
+
+matrix:
+  # Matrix Server Configuration
+  server:
+    homeserver_url: "${MATRIX_HOMESERVER_URL}"
+    server_name: "${MATRIX_SERVER_NAME}"
+    
+  # Bot Account für Gentleman System
+  bot:
+    user_id: "@gentleman:${MATRIX_SERVER_NAME}"
+    access_token: "${MATRIX_ACCESS_TOKEN}"
+    device_id: "GENTLEMAN_SYSTEM"
+    
+  # Update Authorization
+  update_authorization:
+    # Erlaubte Matrix Room für Updates
+    allowed_rooms:
+      - "#gentleman-updates:${MATRIX_SERVER_NAME}"
+      - "#admin-commands:${MATRIX_SERVER_NAME}"
+      
+    # Registrierte Geräte (Matrix User IDs)
+    authorized_devices:
+      - "@admin:${MATRIX_SERVER_NAME}"           # Hauptadmin
+      - "@rx-node:${MATRIX_SERVER_NAME}"         # RX 6700 XT System
+      - "@m1-node:${MATRIX_SERVER_NAME}"         # M1 Mac
+      - "@i7-node:${MATRIX_SERVER_NAME}"         # i7 MacBook
+      - "@mobile-client:${MATRIX_SERVER_NAME}"   # Mobile Client
+      
+    # Power Levels (Berechtigungsstufen)
+    permissions:
+      # Level 100: Vollzugriff auf alle Updates
+      admin:
+        level: 100
+        users:
+          - "@admin:${MATRIX_SERVER_NAME}"
+        allowed_commands:
+          - "system_update"
+          - "security_patch"
+          - "config_change"
+          - "service_restart"
+          - "rollback"
+          - "emergency_stop"
+          
+      # Level 50: Standard-Updates
+      device_operator:
+        level: 50
+        users:
+          - "@rx-node:${MATRIX_SERVER_NAME}"
+          - "@m1-node:${MATRIX_SERVER_NAME}"
+          - "@i7-node:${MATRIX_SERVER_NAME}"
+        allowed_commands:
+          - "software_update"
+          - "config_update"
+          - "service_restart"
+          - "health_check"
+          
+      # Level 25: Nur lesende Zugriffe
+      observer:
+        level: 25
+        users:
+          - "@mobile-client:${MATRIX_SERVER_NAME}"
+        allowed_commands:
+          - "status_check"
+          - "log_view"
+          - "health_check"
+          
+  # Update Commands
+  commands:
+    # System Updates
+    system_update:
+      command_prefix: "!gentleman update"
+      required_level: 100
+      confirmation_required: true
+      rollback_supported: true
+      
+    # Security Patches
+    security_patch:
+      command_prefix: "!gentleman security"
+      required_level: 100
+      confirmation_required: true
+      auto_notification: true
+      
+    # Software Updates
+    software_update:
+      command_prefix: "!gentleman software"
+      required_level: 50
+      confirmation_required: false
+      auto_apply: true
+      
+    # Configuration Updates
+    config_update:
+      command_prefix: "!gentleman config"
+      required_level: 50
+      confirmation_required: true
+      backup_before: true
+      
+    # Service Management
+    service_restart:
+      command_prefix: "!gentleman restart"
+      required_level: 50
+      confirmation_required: false
+      
+    # Rollback
+    rollback:
+      command_prefix: "!gentleman rollback"
+      required_level: 100
+      confirmation_required: true
+      emergency_command: true
+      
+  # Security Settings
+  security:
+    # Multi-Factor Authentication
+    mfa_required: true
+    mfa_methods:
+      - "matrix_reaction"     # Reaction-basierte Bestätigung
+      - "device_verification" # Geräte-Verifikation
+      
+    # Rate Limiting
+    rate_limiting:
+      enabled: true
+      max_commands_per_hour: 10
+      max_commands_per_day: 50
+      
+    # Audit Logging
+    audit_log:
+      enabled: true
+      log_all_commands: true
+      log_failed_attempts: true
+      retention_days: 90
+      
+    # Emergency Stop
+    emergency_stop:
+      enabled: true
+      command: "!gentleman emergency-stop"
+      required_confirmations: 2
+      timeout_seconds: 300
+      
+  # Notifications
+  notifications:
+    # Update Notifications
+    update_started:
+      enabled: true
+      rooms: 
+        - "#gentleman-updates:${MATRIX_SERVER_NAME}"
+      message_template: "🎩 Update gestartet: {update_type} auf {device}"
+      
+    update_completed:
+      enabled: true
+      rooms:
+        - "#gentleman-updates:${MATRIX_SERVER_NAME}"
+      message_template: "✅ Update abgeschlossen: {update_type} auf {device}"
+      
+    update_failed:
+      enabled: true
+      rooms:
+        - "#gentleman-updates:${MATRIX_SERVER_NAME}"
+        - "#admin-alerts:${MATRIX_SERVER_NAME}"
+      message_template: "❌ Update fehlgeschlagen: {update_type} auf {device} - Fehler: {error}"
+      
+    unauthorized_attempt:
+      enabled: true
+      rooms:
+        - "#security-alerts:${MATRIX_SERVER_NAME}"
+      message_template: "🚨 Nicht autorisierter Update-Versuch von {user_id}"
+      
+  # Device Registration
+  device_registration:
+    # Automatische Registrierung neuer Geräte
+    auto_register: false
+    
+    # Registrierungsprozess
+    registration_room: "#device-registration:${MATRIX_SERVER_NAME}"
+    approval_required: true
+    admin_approval_users:
+      - "@admin:${MATRIX_SERVER_NAME}"
+      
+    # Geräte-Verifikation
+    device_verification:
+      certificate_required: true
+      nebula_cert_validation: true
+      device_fingerprint: true
+      
+  # Integration Settings
+  integrations:
+    # Home Assistant Integration
+    homeassistant:
+      enabled: true
+      notify_on_updates: true
+      
+    # Proton Mail Integration
+    protonmail:
+      enabled: true
+      email_notifications: true
+      
+    # Monitoring Integration
+    monitoring:
+      enabled: true
+      metrics_collection: true
+      grafana_notifications: true 

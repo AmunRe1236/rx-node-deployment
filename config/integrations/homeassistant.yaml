@@ -1,0 +1,238 @@
+# 🎩 GENTLEMAN - Home Assistant Integration
+# ═══════════════════════════════════════════════════════════════
+# Home Assistant Integration für Gentleman Distributed AI Pipeline
+
+homeassistant:
+  # Server Configuration
+  server:
+    host: "homeassistant.local"
+    port: 8123
+    protocol: "http"
+    
+  # Authentication
+  auth:
+    access_token: "${HA_ACCESS_TOKEN}"
+    webhook_id: "${HA_WEBHOOK_ID}"
+    
+  # Voice Assistant Integration
+  voice_assistant:
+    wake_word: "Hey Gentleman"
+    
+    # Pipeline Integration
+    pipeline:
+      stt:
+        endpoint: "http://192.168.100.20:8002/transcribe"
+      llm:
+        endpoint: "http://192.168.100.10:8001/generate"
+      tts:
+        endpoint: "http://192.168.100.20:8003/synthesize"
+        
+    # Intent Recognition
+    intents:
+      smart_home_control:
+        - "schalte {device} {state}"
+        - "dimme {device} auf {brightness}"
+      information_request:
+        - "wie ist das wetter"
+        - "wie spät ist es"
+      media_control:
+        - "spiele {media} ab"
+        - "pausiere die musik"
+        
+  # Device Integration
+  devices:
+    gentleman_system:
+      name: "Gentleman AI System"
+      model: "Distributed AI Pipeline v1.0"
+      manufacturer: "Gentleman Project"
+      
+      # Sensors
+      sensors:
+        - name: "Gentleman System Status"
+          topic: "gentleman/status"
+        - name: "Gentleman GPU Usage"
+          topic: "gentleman/gpu"
+          unit: "%"
+        - name: "Gentleman Response Time"
+          topic: "gentleman/metrics"
+          unit: "ms"
+          
+      # Controls
+      switches:
+        - name: "Gentleman Voice Assistant"
+          command_topic: "gentleman/voice/set"
+          state_topic: "gentleman/voice/state"
+          
+  # Automations
+  automations:
+    # Voice Command Processing
+    voice_command:
+      trigger:
+        platform: "webhook"
+        webhook_id: "gentleman_voice_command"
+      action:
+        service: "rest_command.gentleman_process_command"
+        
+    # Smart Home Control
+    smart_home_control:
+      trigger:
+        platform: "mqtt"
+        topic: "gentleman/intent/smart_home_control"
+      action:
+        service: "homeassistant.turn_{{ trigger.payload_json.action }}"
+        target:
+          entity_id: "{{ trigger.payload_json.entity_id }}"
+          
+    # Health Monitoring
+    health_alert:
+      trigger:
+        platform: "numeric_state"
+        entity_id: "sensor.gentleman_gpu_temperature"
+        above: 80
+      action:
+        service: "notify.mobile_app"
+        data:
+          title: "🎩 Gentleman System Alert"
+          message: "GPU Temperatur zu hoch!"
+          
+  # MQTT Configuration
+  mqtt:
+    topics:
+      status: "gentleman/status"
+      metrics: "gentleman/metrics"
+      gpu: "gentleman/gpu"
+      voice_commands: "gentleman/voice/commands"
+      
+  # REST Commands
+  rest_commands:
+    gentleman_process_command:
+      url: "http://192.168.100.10:8001/process_ha_command"
+      method: "POST"
+      headers:
+        Authorization: "Bearer {{ states('input_text.gentleman_api_token') }}"
+        Content-Type: "application/json"
+        
+  # Dashboard Cards
+  dashboard:
+    cards:
+      - type: "entities"
+        title: "🎩 Gentleman AI System"
+        entities:
+          - "sensor.gentleman_system_status"
+          - "sensor.gentleman_gpu_usage"
+          - "switch.gentleman_voice_assistant"
+          
+      - type: "gauge"
+        title: "GPU Auslastung"
+        entity: "sensor.gentleman_gpu_usage"
+        min: 0
+        max: 100 
+
+# 📧 Proton Mail Integration
+protonmail:
+  # E-Mail Notifications
+  notify:
+    - name: "gentleman_email"
+      platform: rest
+      resource: "http://protonmail-service:8000/send_email"
+      method: POST
+      headers:
+        Content-Type: "application/json"
+      data:
+        to: "{{ to }}"
+        subject: "{{ subject }}"
+        body: "{{ message }}"
+        
+  # E-Mail Sensors
+  sensor:
+    - platform: rest
+      name: "protonmail_status"
+      resource: "http://protonmail-service:8000/health"
+      json_attributes:
+        - email
+        - timestamp
+      value_template: "{{ value_json.status }}"
+      scan_interval: 60
+      
+    - platform: rest
+      name: "protonmail_new_emails"
+      resource: "http://protonmail-service:8000/check_emails"
+      json_attributes:
+        - emails
+      value_template: "{{ value_json.new_emails }}"
+      scan_interval: 300  # 5 Minuten
+      
+  # E-Mail Automations
+  automation:
+    # Benachrichtigung bei neuen E-Mails
+    - alias: "Neue E-Mail Benachrichtigung"
+      trigger:
+        - platform: state
+          entity_id: sensor.protonmail_new_emails
+      condition:
+        - condition: template
+          value_template: "{{ trigger.to_state.state | int > 0 }}"
+      action:
+        - service: notify.mobile_app
+          data:
+            title: "📧 Neue E-Mail"
+            message: "{{ trigger.to_state.state }} neue E-Mail(s) erhalten"
+            
+    # Voice Command für E-Mails
+    - alias: "E-Mail Voice Command"
+      trigger:
+        - platform: event
+          event_type: voice_command
+          event_data:
+            command: "lies neue e-mails vor"
+      action:
+        - service: tts.speak
+          data:
+            entity_id: media_player.gentleman_speaker
+            message: >
+              {% set emails = state_attr('sensor.protonmail_new_emails', 'emails') %}
+              {% if emails | length > 0 %}
+                Sie haben {{ emails | length }} neue E-Mail{% if emails | length > 1 %}s{% endif %}.
+                {% for email in emails[:3] %}
+                  E-Mail von {{ email.from_addr }}, Betreff: {{ email.subject }}.
+                {% endfor %}
+              {% else %}
+                Sie haben keine neuen E-Mails.
+              {% endif %}
+              
+    # Smart Home E-Mail Benachrichtigungen
+    - alias: "Smart Home Status E-Mail"
+      trigger:
+        - platform: state
+          entity_id: alarm_control_panel.home_security
+          to: "triggered"
+      action:
+        - service: rest_command.send_email
+          data:
+            to: "amonbaumgartner@gentlemail.com"
+            subject: "🚨 Sicherheitsalarm ausgelöst"
+            body: >
+              Sicherheitsalarm wurde um {{ now().strftime('%H:%M:%S') }} ausgelöst.
+              
+              Status: {{ states('alarm_control_panel.home_security') }}
+              Zeitpunkt: {{ now().strftime('%d.%m.%Y %H:%M:%S') }}
+              
+              Bitte prüfen Sie Ihr Zuhause.
+              
+              Mit freundlichen Grüßen,
+              Ihr Gentleman AI System
+
+# REST Commands für E-Mail
+rest_command:
+  send_email:
+    url: "http://protonmail-service:8000/send_email"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    payload: >
+      {
+        "to": "{{ to }}",
+        "subject": "{{ subject }}",
+        "body": "{{ body }}",
+        "priority": "{{ priority | default('normal') }}"
+      } 

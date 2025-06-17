@@ -1,0 +1,182 @@
+# 🎩 GENTLEMAN - RX Node Configuration (LLM-Spezialist)
+# ═══════════════════════════════════════════════════════════════
+version: '3.8'
+
+networks:
+  gentleman-mesh:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  gentleman-models:
+  gentleman-logs:
+  gentleman-config:
+  prometheus-data:
+
+services:
+  # 🖥️ LLM SERVER (RX 6700 XT) - HAUPTAUFGABE
+  llm-server:
+    build:
+      context: ./services/llm-server
+      dockerfile: Dockerfile
+    container_name: gentleman-llm
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=llm-server
+      - GENTLEMAN_GPU_ENABLED=true
+      - GENTLEMAN_MODEL_PATH=/app/models
+      - ROCM_VERSION=5.7
+      - GENTLEMAN_NODE_ROLE=llm-powerhouse
+    volumes:
+      - gentleman-models:/app/models
+      - gentleman-logs:/app/logs
+      - ./config:/app/config:ro
+    ports:
+      - "8001:8000"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.1.10
+    devices:
+      - /dev/kfd:/dev/kfd
+      - /dev/dri:/dev/dri
+    group_add:
+      - video
+      - render
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🌐 MESH COORDINATOR (Nebula-Verbindung zum M1)
+  mesh-coordinator:
+    build:
+      context: ./services/mesh-coordinator
+      dockerfile: Dockerfile
+    container_name: gentleman-mesh
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=mesh-coordinator
+      - NEBULA_CONFIG_PATH=/app/nebula
+      - GENTLEMAN_NODE_ROLE=rx-node
+    volumes:
+      - ./nebula:/app/nebula:ro
+      - gentleman-logs:/app/logs
+      - gentleman-config:/app/config
+    ports:
+      - "8004:8000"
+      - "4243:4243/udp"  # Nebula RX Node Port
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.1.40
+    cap_add:
+      - NET_ADMIN
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🌐 WEB INTERFACE (Request Handler)
+  web-interface:
+    build:
+      context: ./clients/web-interface
+      dockerfile: Dockerfile
+    container_name: gentleman-web
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=web-interface
+      - FLASK_ENV=production
+      - GENTLEMAN_NODE_ROLE=rx-node
+      - M1_AUDIO_ENDPOINT=http://192.168.100.1:8002  # M1 STT
+      - M1_TTS_ENDPOINT=http://192.168.100.1:8003    # M1 TTS
+    volumes:
+      - gentleman-logs:/app/logs
+      - ./config:/app/config:ro
+    ports:
+      - "8080:8000"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.1.50
+    depends_on:
+      - llm-server
+      - mesh-coordinator
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 📝 LOG AGGREGATOR
+  log-aggregator:
+    build:
+      context: ./monitoring/logs
+      dockerfile: Dockerfile
+    container_name: gentleman-logs
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=log-aggregator
+      - GENTLEMAN_NODE_ROLE=rx-node
+    volumes:
+      - gentleman-logs:/app/logs
+      - ./config:/app/config:ro
+    ports:
+      - "8005:8000"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.2.30
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 📊 PROMETHEUS MONITORING
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: gentleman-prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/rules:/etc/prometheus/rules:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.2.10
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🚨 ALERT MANAGER
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: gentleman-alerts
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    volumes:
+      - ./monitoring/prometheus/alertmanager.yml:/etc/alertmanager/config.yml:ro
+    ports:
+      - "9093:9093"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.2.40
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9093/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3 

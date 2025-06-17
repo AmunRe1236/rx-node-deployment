@@ -1,0 +1,129 @@
+# 🎮 Nebula Configuration - RX Node (LLM Powerhouse) - UPDATED
+# ═══════════════════════════════════════════════════════════════
+
+# PKI Configuration
+pki:
+  ca: /app/nebula/ca.crt
+  cert: /app/nebula/rx.crt
+  key: /app/nebula/rx.key
+
+# Static host map - M1 Lighthouse (KORRIGIERT)
+static_host_map:
+  "192.168.100.1": ["192.168.68.111:4243"]
+
+# Lighthouse configuration - Connect to M1
+lighthouse:
+  am_lighthouse: false
+  interval: 60
+  hosts:
+    - "192.168.100.1"
+
+# Listen configuration (KORRIGIERT)
+listen:
+  host: 0.0.0.0
+  port: 4244
+
+# Punchy configuration for NAT traversal
+punchy:
+  punch: true
+  respond: true
+  delay: 1s
+
+# Relay configuration
+relay:
+  am_relay: false
+  use_relays: true
+  relays:
+    - 192.168.100.1
+
+# Preferred ranges for local networks
+preferred_ranges:
+  - 192.168.68.0/24
+  - 172.20.0.0/16
+
+# Local range for Docker network
+local_range: "172.20.0.0/16"
+
+# Firewall rules - Allow M1 audio services (KORRIGIERT)
+firewall:
+  conntrack:
+    tcp_timeout: 12m
+    udp_timeout: 3m
+    default_timeout: 10m
+    max_connections: 100
+
+  outbound:
+    # Allow all outbound
+    - port: any
+      proto: any
+      host: any
+
+  inbound:
+    # Allow M1 Lighthouse
+    - port: any
+      proto: any
+      host: 192.168.100.1
+
+    # Allow SSH
+    - port: 22
+      proto: tcp
+      host: any
+
+    # Allow LLM Server
+    - port: 8001
+      proto: tcp
+      host: any
+
+    # Allow Web Interface
+    - port: 8080
+      proto: tcp
+      host: any
+
+    # Allow Mesh Coordinator
+    - port: 8004
+      proto: tcp
+      host: any
+
+    # Allow Monitoring
+    - port: 9090
+      proto: tcp
+      host: any
+
+    # Allow Log Aggregator
+    - port: 8005
+      proto: tcp
+      host: any
+
+    # Allow Nebula (KORRIGIERT)
+    - port: 4244
+      proto: udp
+      host: any
+
+# Logging
+logging:
+  level: info
+  format: text
+
+# TUN device configuration
+tun:
+  disabled: false
+  dev: nebula1
+  drop_local_broadcast: false
+  drop_multicast: false
+  tx_queue: 500
+  mtu: 1300
+
+# Stats configuration
+stats:
+  type: prometheus
+  listen: 127.0.0.1:8080
+  path: /metrics
+  namespace: nebula
+  subsystem: rx_node
+  interval: 10s
+
+# Handshake configuration
+handshakes:
+  try_interval: 100ms
+  retries: 20
+  trigger_buffer: 64

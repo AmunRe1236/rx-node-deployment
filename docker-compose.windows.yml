@@ -1,0 +1,120 @@
+# 🪟 GENTLEMAN - Windows Docker Compose Override
+# ═══════════════════════════════════════════════════════════════
+version: '3.8'
+
+services:
+  # 🖥️ LLM SERVER (Windows with CUDA support)
+  llm-server:
+    build:
+      context: ./services/llm-server
+      dockerfile: Dockerfile.windows
+    environment:
+      - GENTLEMAN_SERVICE=llm-server
+      - GENTLEMAN_GPU_ENABLED=true
+      - GENTLEMAN_MODEL_PATH=/app/models
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # 🎤 STT SERVICE (Windows WSL2)
+  stt-service:
+    build:
+      context: ./services/stt-service
+      dockerfile: Dockerfile.windows
+    environment:
+      - GENTLEMAN_SERVICE=stt-service
+      - GENTLEMAN_WHISPER_MODEL=large-v3
+      - GENTLEMAN_LANGUAGE=de
+      - PYTORCH_DEVICE=cpu  # CPU fallback on Windows
+
+  # 🗣️ TTS SERVICE (Windows WSL2)
+  tts-service:
+    build:
+      context: ./services/tts-service
+      dockerfile: Dockerfile.windows
+    environment:
+      - GENTLEMAN_SERVICE=tts-service
+      - GENTLEMAN_VOICE_MODEL=coqui-tts
+      - GENTLEMAN_EMOTION_ENABLED=true
+      - PYTORCH_DEVICE=cpu  # CPU fallback on Windows
+
+  # 🌐 WEB INTERFACE (Windows optimized)
+  web-interface:
+    environment:
+      - FLASK_ENV=production
+      - WINDOWS_MODE=true
+      - WSL2_BACKEND=true
+    volumes:
+      - gentleman-logs:/app/logs
+      - ./config:/app/config:ro
+      - /mnt/c/Users:/windows/users:ro  # WSL2 Windows access
+
+  # 📊 GRAFANA (Windows paths)
+  grafana:
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-gentleman}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-CHANGE_ME_IMMEDIATELY}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_PATHS_DATA=/var/lib/grafana
+      - GF_PATHS_LOGS=/var/log/grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+
+  # 🔒 Matrix Update Service (Windows compatible)
+  matrix-update-service:
+    build:
+      context: ./services/matrix-update-service
+      dockerfile: Dockerfile.windows
+    environment:
+      - MATRIX_HOMESERVER_URL=${MATRIX_HOMESERVER_URL}
+      - MATRIX_ACCESS_TOKEN=${MATRIX_ACCESS_TOKEN}
+      - MATRIX_USER_ID=${MATRIX_USER_ID}
+      - WINDOWS_MODE=true
+      - WSL2_DOCKER=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config:/app/config:ro
+      - ./scripts:/app/scripts:ro
+      - /mnt/c:/windows:ro  # Windows filesystem access
+
+# 🌐 Windows-specific networks
+networks:
+  gentleman-mesh:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "0.0.0.0"
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+
+# 💾 Windows-specific volumes
+volumes:
+  gentleman-models:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${USERPROFILE}/gentleman/models
+  
+  gentleman-voices:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${USERPROFILE}/gentleman/voices
+  
+  gentleman-logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${USERPROFILE}/gentleman/logs 

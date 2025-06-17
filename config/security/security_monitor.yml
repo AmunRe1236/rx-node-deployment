@@ -1,0 +1,21 @@
+# 🔒 Gentleman Security Monitoring
+security_monitoring:
+  enabled: true
+  log_level: INFO
+  
+  # Threat Detection
+  threat_detection:
+    brute_force_threshold: 5
+    unusual_traffic_multiplier: 10
+    failed_auth_threshold: 3
+    
+  # Alert Configuration
+  alerts:
+    email_enabled: false  # Konfiguriere nach Bedarf
+    webhook_enabled: true
+    log_enabled: true
+    
+  # Auto-Response
+  auto_response:
+    block_suspicious_ips: true
+    rate_limit_aggressive: true

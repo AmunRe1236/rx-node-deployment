@@ -1,0 +1,22 @@
+{
+  "git_server": "http://192.168.100.1:3010",
+  "local_repo": "/opt/gentleman",
+  "sync_interval": 300,
+  "node_id": "rx-node",
+  "auto_restart_services": true,
+  "services_to_restart": ["docker-compose"],
+  "nebula_config": {
+    "enabled": true,
+    "config_path": "/opt/gentleman/nebula/rx-node/config.yml"
+  },
+  "discovery_service": {
+    "enabled": true,
+    "port": 8005,
+    "bind_ip": "0.0.0.0"
+  },
+  "health_check": {
+    "enabled": true,
+    "endpoint": "http://localhost:8005/health",
+    "interval": 60
+  }
+} 

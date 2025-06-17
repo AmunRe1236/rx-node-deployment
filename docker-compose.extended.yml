@@ -1,0 +1,129 @@
+# 🎩 GENTLEMAN - Extended Integrations
+# ═══════════════════════════════════════════════════════════════
+# Docker Compose für TrueNAS und Home Assistant Integrationen
+
+version: '3.8'
+
+networks:
+  gentleman-mesh:
+    external: true
+  homeassistant:
+    driver: bridge
+
+volumes:
+  # TrueNAS NFS Mounts
+  gentleman-models-nfs:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=truenas.local,rw,nfsvers=4
+      device: ":/mnt/gentleman/models"
+      
+  # Home Assistant Data
+  homeassistant-config:
+  mosquitto-data:
+  protonmail_data:
+  protonmail_logs:
+
+services:
+  # 🏠 HOME ASSISTANT
+  homeassistant:
+    container_name: gentleman-homeassistant
+    image: homeassistant/home-assistant:stable
+    restart: unless-stopped
+    privileged: true
+    environment:
+      - TZ=Europe/Berlin
+      - GENTLEMAN_LLM_ENDPOINT=http://192.168.100.10:8001
+    volumes:
+      - homeassistant-config:/config
+      - ./config/integrations/homeassistant.yaml:/config/gentleman.yaml:ro
+    ports:
+      - "8123:8123"
+    networks:
+      - gentleman-mesh
+      - homeassistant
+      
+  # 📡 MQTT BROKER
+  mosquitto:
+    container_name: gentleman-mosquitto
+    image: eclipse-mosquitto:latest
+    restart: unless-stopped
+    volumes:
+      - mosquitto-data:/mosquitto/data
+    ports:
+      - "1883:1883"
+    networks:
+      - gentleman-mesh
+      - homeassistant
+      
+  # 🔗 GENTLEMAN-HA BRIDGE
+  gentleman-ha-bridge:
+    build:
+      context: ./services/ha-bridge
+      dockerfile: Dockerfile
+    container_name: gentleman-ha-bridge
+    restart: unless-stopped
+    environment:
+      - HA_ENDPOINT=http://homeassistant:8123
+      - HA_TOKEN=${HA_ACCESS_TOKEN}
+      - MQTT_BROKER=mosquitto:1883
+      - LLM_ENDPOINT=http://192.168.100.10:8001
+    ports:
+      - "8124:8000"
+    networks:
+      - gentleman-mesh
+      - homeassistant
+    depends_on:
+      - homeassistant
+      - mosquitto
+      
+  # 📊 TRUENAS SYNC SERVICE
+  gentleman-truenas-sync:
+    build:
+      context: ./services/truenas-sync
+      dockerfile: Dockerfile
+    container_name: gentleman-truenas-sync
+    restart: unless-stopped
+    environment:
+      - TRUENAS_HOST=truenas.local
+      - TRUENAS_API_KEY=${TRUENAS_API_KEY}
+    volumes:
+      - gentleman-models-nfs:/sync/models
+    networks:
+      - gentleman-mesh 
+
+  # 📧 Proton Mail Service
+  protonmail-service:
+    build: ./services/protonmail-service
+    container_name: gentleman-protonmail
+    hostname: protonmail-service
+    restart: unless-stopped
+    ports:
+      - "8127:8000"
+    environment:
+      - PROTON_USERNAME=${PROTON_USERNAME}
+      - PROTON_PASSWORD=${PROTON_PASSWORD}
+      - PROTON_APP_PASSWORD=${PROTON_APP_PASSWORD}
+      - LLM_ENDPOINT=http://llm-server:8001
+      - MQTT_BROKER=mosquitto:1883
+      - HA_ENDPOINT=http://homeassistant:8123
+    volumes:
+      - ./config/integrations/protonmail.yaml:/app/config/protonmail.yaml:ro
+      - protonmail_data:/app/data
+      - protonmail_logs:/app/logs
+    networks:
+      - gentleman-network
+      - nebula-mesh
+    depends_on:
+      - mosquitto
+      - llm-server
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.protonmail.rule=Host(`protonmail.gentleman.local`)"
+      - "traefik.http.services.protonmail.loadbalancer.server.port=8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3 

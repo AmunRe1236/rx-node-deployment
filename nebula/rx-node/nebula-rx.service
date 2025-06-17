@@ -1,0 +1,33 @@
+[Unit]
+Description=Nebula VPN - RX Node (LLM Server)
+Documentation=https://github.com/slackhq/nebula
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/bin/nebula -config /etc/nebula/rx-node/config.yml
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/etc/nebula/rx-node
+CapabilityBoundingSet=CAP_NET_ADMIN
+AmbientCapabilities=CAP_NET_ADMIN
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=nebula-rx
+
+[Install]
+WantedBy=multi-user.target 

@@ -1,0 +1,212 @@
+version: '3.8'
+
+# 🎩 GENTLEMAN - Local Git Server
+# ═══════════════════════════════════════════════════════════════
+# Lokaler Git-Server mit Gitea für maximale Kontrolle und Sicherheit
+
+services:
+  # 📚 GITEA GIT SERVER
+  gitea:
+    image: gitea/gitea:1.21-rootless
+    container_name: gentleman-gitea
+    hostname: gitea.gentleman.local
+    restart: unless-stopped
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=gitea-db:5432
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD=${GITEA_DB_PASSWORD:-gentleman_secure_db_password}
+      - GITEA__server__DOMAIN=gitea.gentleman.local
+      - GITEA__server__SSH_DOMAIN=gitea.gentleman.local
+      - GITEA__server__ROOT_URL=https://gitea.gentleman.local:3000
+      - GITEA__server__HTTP_PORT=3000
+      - GITEA__server__SSH_PORT=2222
+      - GITEA__security__INSTALL_LOCK=false
+      - GITEA__security__SECRET_KEY=${GITEA_SECRET_KEY:-gentleman_change_this_secret_key}
+      - GITEA__security__INTERNAL_TOKEN=${GITEA_INTERNAL_TOKEN:-gentleman_change_this_internal_token}
+      - GITEA__service__DISABLE_REGISTRATION=true
+      - GITEA__service__REQUIRE_SIGNIN_VIEW=true
+      - GITEA__repository__DEFAULT_PRIVATE=private
+      - GITEA__mailer__ENABLED=false
+      - GITEA__log__LEVEL=Info
+      - GITEA__openid__ENABLE_OPENID_SIGNIN=false
+      - GITEA__webhook__ALLOWED_HOST_LIST=192.168.100.0/24,172.20.0.0/16
+    volumes:
+      - gitea-data:/var/lib/gitea
+      - gitea-config:/etc/gitea
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"  # Web Interface
+      - "2222:2222"  # SSH Git Access
+    networks:
+      gentleman-git:
+        ipv4_address: 172.21.1.10
+      gentleman-mesh:
+        ipv4_address: 172.20.1.10
+    depends_on:
+      - gitea-db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gitea.rule=Host(`gitea.gentleman.local`)"
+      - "traefik.http.routers.gitea.tls=true"
+      - "traefik.http.services.gitea.loadbalancer.server.port=3000"
+
+  # 🗄️ POSTGRESQL DATABASE
+  gitea-db:
+    image: postgres:15-alpine
+    container_name: gentleman-gitea-db
+    hostname: gitea-db.gentleman.local
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=${GITEA_DB_PASSWORD:-gentleman_secure_db_password}
+      - POSTGRES_DB=gitea
+      - POSTGRES_INITDB_ARGS=--encoding=UTF8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - gitea-db-data:/var/lib/postgresql/data
+      - ./config/git-server/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      gentleman-git:
+        ipv4_address: 172.21.1.20
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gitea -d gitea"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=false"
+
+  # 🔄 GITEA BACKUP SERVICE
+  gitea-backup:
+    image: alpine:latest
+    container_name: gentleman-gitea-backup
+    hostname: gitea-backup.gentleman.local
+    restart: unless-stopped
+    environment:
+      - BACKUP_INTERVAL=86400  # 24 hours
+      - BACKUP_RETENTION=30    # 30 days
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=${GITEA_DB_PASSWORD:-gentleman_secure_db_password}
+      - POSTGRES_DB=gitea
+    volumes:
+      - gitea-data:/gitea-data:ro
+      - gitea-db-data:/db-data:ro
+      - gitea-backups:/backups
+      - ./scripts/git-server/backup.sh:/backup.sh:ro
+    networks:
+      gentleman-git:
+        ipv4_address: 172.21.1.30
+    depends_on:
+      - gitea
+      - gitea-db
+    command: |
+      sh -c "
+        apk add --no-cache postgresql-client curl tar gzip &&
+        chmod +x /backup.sh &&
+        while true; do
+          /backup.sh
+          sleep \$${BACKUP_INTERVAL}
+        done
+      "
+    labels:
+      - "traefik.enable=false"
+
+  # 🌐 NGINX REVERSE PROXY (Optional)
+  gitea-nginx:
+    image: nginx:alpine
+    container_name: gentleman-gitea-nginx
+    hostname: git.gentleman.local
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/git-server/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/security/ssl:/etc/nginx/ssl:ro
+      - gitea-nginx-logs:/var/log/nginx
+    networks:
+      gentleman-git:
+        ipv4_address: 172.21.1.40
+      gentleman-mesh:
+        ipv4_address: 172.20.1.40
+    depends_on:
+      - gitea
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.git.rule=Host(`git.gentleman.local`)"
+      - "traefik.http.routers.git.tls=true"
+
+  # 📊 GITEA MONITORING
+  gitea-exporter:
+    image: prom/node-exporter:latest
+    container_name: gentleman-gitea-exporter
+    hostname: gitea-exporter.gentleman.local
+    restart: unless-stopped
+    command:
+      - '--path.rootfs=/host'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /:/host:ro,rslave
+    networks:
+      gentleman-git:
+        ipv4_address: 172.21.1.50
+    ports:
+      - "9100:9100"
+    labels:
+      - "traefik.enable=false"
+
+# 🌐 Networks
+networks:
+  gentleman-git:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.1.0/24
+          gateway: 172.21.1.1
+    labels:
+      - "com.gentleman.network=git-server"
+      
+  gentleman-mesh:
+    external: true
+
+# 💾 Volumes
+volumes:
+  gitea-data:
+    driver: local
+    labels:
+      - "com.gentleman.volume=gitea-data"
+      
+  gitea-config:
+    driver: local
+    labels:
+      - "com.gentleman.volume=gitea-config"
+      
+  gitea-db-data:
+    driver: local
+    labels:
+      - "com.gentleman.volume=gitea-database"
+      
+  gitea-backups:
+    driver: local
+    labels:
+      - "com.gentleman.volume=gitea-backups"
+      
+  gitea-nginx-logs:
+    driver: local
+    labels:
+      - "com.gentleman.volume=gitea-nginx-logs" 

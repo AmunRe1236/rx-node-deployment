@@ -1,0 +1,26 @@
+# 🎩 Gentleman AI - Alertmanager Configuration
+# ═══════════════════════════════════════════════════════════════
+
+global:
+  smtp_smarthost: 'localhost:587'
+  smtp_from: 'gentleman-ai@localhost'
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'web.hook'
+
+receivers:
+- name: 'web.hook'
+  webhook_configs:
+  - url: 'http://log-aggregator:8005/alerts'
+    send_resolved: true
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']

@@ -1,0 +1,39 @@
+# 🎩 GENTLEMAN LLM Server - Specific Dependencies
+# ═══════════════════════════════════════════════════════════════
+
+# 🚀 Core Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+
+# 🧠 AI/ML Libraries (ROCm optimized)
+torch>=2.1.0
+transformers>=4.35.0,<4.40.0
+tokenizers>=0.15.0
+accelerate>=0.24.0
+optimum>=1.14.0
+bitsandbytes>=0.41.0
+
+# 🎭 Emotion Analysis
+textblob>=0.17.1
+vaderSentiment>=3.3.2
+
+# 📊 Monitoring
+prometheus-client>=0.19.0
+psutil>=5.9.0
+
+# 🔧 Utilities
+numpy>=1.21.0,<1.25.0
+scipy>=1.11.0
+tqdm>=4.66.0
+
+# 🌐 HTTP Client
+httpx>=0.25.0
+requests>=2.31.0
+
+# 📝 Configuration
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+
+# 🔒 Security
+cryptography>=41.0.0 

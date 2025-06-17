@@ -1,0 +1,94 @@
+# 🎩 GENTLEMAN - Proton Mail Integration
+# ═══════════════════════════════════════════════════════════════
+# Proton Mail Integration für amonbaumgartner@gentlemail.com
+
+protonmail:
+  # Account Configuration
+  account:
+    email: "amonbaumgartner@gentlemail.com"
+    display_name: "Gentleman AI Assistant"
+    signature: |
+      Mit freundlichen Grüßen,
+      Gentleman AI Assistant
+      
+      🎩 Wo Eleganz auf Funktionalität trifft
+      
+  # Authentication
+  auth:
+    username: "${PROTON_USERNAME}"
+    password: "${PROTON_PASSWORD}"
+    app_password: "${PROTON_APP_PASSWORD}"
+    two_factor_enabled: true
+    
+  # Proton Mail Bridge
+  bridge:
+    enabled: true
+    host: "127.0.0.1"
+    imap_port: 1143
+    smtp_port: 1025
+    
+  # AI Email Processing
+  ai_features:
+    # Smart Reply Generation
+    smart_reply:
+      enabled: true
+      llm_endpoint: "http://192.168.100.10:8001/generate"
+      tone: "professional_friendly"
+      language: "german"
+      
+    # Email Classification
+    classification:
+      categories:
+        - "support"
+        - "business" 
+        - "personal"
+        - "technical"
+        
+    # Priority Detection
+    priority_detection:
+      urgent_keywords:
+        - "dringend"
+        - "urgent"
+        - "asap"
+        - "sofort"
+        
+  # Automation
+  automation:
+    auto_reply:
+      enabled: true
+      delay_minutes: 5
+      
+  # Templates
+  templates:
+    professional:
+      subject: "Re: {original_subject}"
+      body: |
+        Guten Tag,
+        
+        vielen Dank für Ihre E-Mail. Ich habe Ihre Nachricht erhalten
+        und werde sie schnellstmöglich bearbeiten.
+        
+  # Integrations
+  integrations:
+    homeassistant:
+      enabled: true
+      endpoint: "http://192.168.100.100:8123"
+      
+    mqtt:
+      enabled: true
+      broker: "mosquitto:1883"
+      topics:
+        new_email: "gentleman/email/new"
+        
+  # Voice Integration
+  voice:
+    tts_endpoint: "http://192.168.100.20:8003/synthesize"
+    commands:
+      - "lies neue e-mails vor"
+      - "sende e-mail an {contact}"
+      
+  # Security
+  security:
+    encryption: true
+    spam_protection: true
+    data_retention_days: 90 

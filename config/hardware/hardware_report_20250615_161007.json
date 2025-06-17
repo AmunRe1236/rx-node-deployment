@@ -1,0 +1,52 @@
+{
+  "detection_timestamp": "2025-06-15T16:10:07+02:00",
+  "hostname": "archlinux",
+  "system": {
+    "os": "Linux",
+    "distro": "arch",
+    "distro_version": "",
+    "kernel": "6.12.32-1-lts",
+    "architecture": "x86_64"
+  },
+  "cpu": {
+    "model": "AMD Ryzen 5 1600 Six-Core Processor",
+    "cores": 12,
+    "threads": 12,
+    "apple_silicon": false,
+    "performance_score": 30
+  },
+  "gpu": {
+    "count": 5,
+    "vendors": "AMD ",
+    "models": "",
+    "nvidia_gpus": 0,
+    "amd_gpus": 5,
+    "rx6700xt": true,
+    "mps_available": false,
+    "nvidia_driver": "",
+    "rocm_version": ""
+  },
+  "memory": {
+    "total_gb": 15,
+    "performance_score": 20
+  },
+  "storage": {
+    "total": "45G",
+    "available": "9,0G",
+    "type": "SSD",
+    "performance_score": 20
+  },
+  "network": {
+    "ip_addresses": "192.168.68.117",
+    "interfaces": "br-b6ccd403b348 docker0 enp33s0 "
+  },
+  "node_capabilities": {
+    "node_id": "llm-server-archlinux",
+    "primary_role": "llm-server",
+    "services": "llm-server,monitoring,matrix-updates",
+    "total_score": 115,
+    "gpu_acceleration": true,
+    "audio_processing": false,
+    "development_hub": false
+  }
+}

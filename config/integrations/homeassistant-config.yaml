@@ -1,0 +1,225 @@
+# 🎩 GENTLEMAN - Home Assistant Integration
+# ═══════════════════════════════════════════════════════════════
+# Home Assistant Integration für Gentleman Distributed AI Pipeline
+
+homeassistant:
+  # Home Assistant Server Configuration
+  server:
+    host: "homeassistant.local"
+    port: 8123
+    protocol: "http"
+    api_version: "v1"
+    
+  # Authentication
+  auth:
+    access_token: "${HA_ACCESS_TOKEN}"
+    webhook_id: "${HA_WEBHOOK_ID}"
+    
+  # Gentleman Voice Assistant Integration
+  voice_assistant:
+    # Wake Word Detection
+    wake_word: "Hey Gentleman"
+    
+    # Voice Pipeline Integration
+    pipeline:
+      stt:
+        service: "gentleman.stt"
+        endpoint: "http://192.168.100.20:8002/transcribe"
+        
+      llm:
+        service: "gentleman.llm"
+        endpoint: "http://192.168.100.10:8001/generate"
+        
+      tts:
+        service: "gentleman.tts"
+        endpoint: "http://192.168.100.20:8003/synthesize"
+        
+    # Intent Recognition
+    intents:
+      - name: "smart_home_control"
+        patterns:
+          - "schalte {device} {state}"
+          - "dimme {device} auf {brightness}"
+          - "setze {device} auf {color}"
+          
+      - name: "information_request"
+        patterns:
+          - "wie ist das wetter"
+          - "wie spät ist es"
+          - "was steht heute an"
+          
+      - name: "media_control"
+        patterns:
+          - "spiele {media} ab"
+          - "pausiere die musik"
+          - "nächster titel"
+          
+  # Device Integration
+  devices:
+    # Gentleman als HA Device
+    gentleman_system:
+      name: "Gentleman AI System"
+      model: "Distributed AI Pipeline v1.0"
+      manufacturer: "Gentleman Project"
+      identifiers: ["gentleman_main"]
+      
+      # Entities
+      entities:
+        # System Status
+        - platform: "sensor"
+          name: "Gentleman System Status"
+          state_topic: "gentleman/status"
+          value_template: "{{ value_json.status }}"
+          
+        - platform: "sensor"
+          name: "Gentleman Uptime"
+          state_topic: "gentleman/status"
+          value_template: "{{ value_json.uptime }}"
+          unit_of_measurement: "s"
+          
+        # Performance Metrics
+        - platform: "sensor"
+          name: "Gentleman Requests Processed"
+          state_topic: "gentleman/metrics"
+          value_template: "{{ value_json.requests_processed }}"
+          
+        - platform: "sensor"
+          name: "Gentleman Response Time"
+          state_topic: "gentleman/metrics"
+          value_template: "{{ value_json.avg_response_time }}"
+          unit_of_measurement: "ms"
+          
+        # GPU Metrics (RX 6700 XT)
+        - platform: "sensor"
+          name: "Gentleman GPU Usage"
+          state_topic: "gentleman/gpu"
+          value_template: "{{ value_json.gpu_usage }}"
+          unit_of_measurement: "%"
+          
+        - platform: "sensor"
+          name: "Gentleman GPU Temperature"
+          state_topic: "gentleman/gpu"
+          value_template: "{{ value_json.gpu_temp }}"
+          unit_of_measurement: "°C"
+          
+        # Voice Assistant Controls
+        - platform: "switch"
+          name: "Gentleman Voice Assistant"
+          command_topic: "gentleman/voice/set"
+          state_topic: "gentleman/voice/state"
+          payload_on: "ON"
+          payload_off: "OFF"
+          
+        - platform: "select"
+          name: "Gentleman Voice Model"
+          command_topic: "gentleman/voice/model/set"
+          state_topic: "gentleman/voice/model/state"
+          options:
+            - "neural_german_female"
+            - "neural_german_male"
+            - "neural_english_female"
+            - "neural_english_male"
+            
+  # Automation Integration
+  automations:
+    # Voice Command Processing
+    - alias: "Gentleman Voice Command"
+      trigger:
+        - platform: "webhook"
+          webhook_id: "gentleman_voice_command"
+      action:
+        - service: "rest_command.gentleman_process_command"
+          data:
+            command: "{{ trigger.json.command }}"
+            context: "{{ trigger.json.context }}"
+            
+    # Smart Home Control via Gentleman
+    - alias: "Gentleman Smart Home Control"
+      trigger:
+        - platform: "mqtt"
+          topic: "gentleman/intent/smart_home_control"
+      action:
+        - choose:
+            - conditions:
+                - condition: "template"
+                  value_template: "{{ trigger.payload_json.action == 'turn_on' }}"
+              sequence:
+                - service: "homeassistant.turn_on"
+                  target:
+                    entity_id: "{{ trigger.payload_json.entity_id }}"
+                    
+            - conditions:
+                - condition: "template"
+                  value_template: "{{ trigger.payload_json.action == 'turn_off' }}"
+              sequence:
+                - service: "homeassistant.turn_off"
+                  target:
+                    entity_id: "{{ trigger.payload_json.entity_id }}"
+                    
+    # System Health Monitoring
+    - alias: "Gentleman System Health Alert"
+      trigger:
+        - platform: "numeric_state"
+          entity_id: "sensor.gentleman_gpu_temperature"
+          above: 80
+      action:
+        - service: "notify.mobile_app"
+          data:
+            title: "🎩 Gentleman System Alert"
+            message: "GPU Temperatur zu hoch: {{ states('sensor.gentleman_gpu_temperature') }}°C"
+            
+  # MQTT Integration
+  mqtt:
+    # Gentleman MQTT Topics
+    topics:
+      status: "gentleman/status"
+      metrics: "gentleman/metrics"
+      gpu: "gentleman/gpu"
+      voice_commands: "gentleman/voice/commands"
+      intents: "gentleman/intents"
+      
+    # Discovery
+    discovery:
+      enabled: true
+      prefix: "homeassistant"
+      
+  # REST Commands
+  rest_commands:
+    gentleman_process_command:
+      url: "http://192.168.100.10:8001/process_ha_command"
+      method: "POST"
+      headers:
+        Authorization: "Bearer {{ states('input_text.gentleman_api_token') }}"
+        Content-Type: "application/json"
+      payload: |
+        {
+          "command": "{{ command }}",
+          "context": {{ context | tojson }},
+          "source": "home_assistant"
+        }
+        
+    gentleman_health_check:
+      url: "http://192.168.100.10:8001/health"
+      method: "GET"
+      
+  # Dashboard Integration
+  dashboard:
+    # Gentleman Control Panel
+    cards:
+      - type: "entities"
+        title: "🎩 Gentleman AI System"
+        entities:
+          - entity: "sensor.gentleman_system_status"
+          - entity: "sensor.gentleman_uptime"
+          - entity: "switch.gentleman_voice_assistant"
+          - entity: "select.gentleman_voice_model"
+          
+      - type: "gauge"
+        title: "GPU Auslastung"
+        entity: "sensor.gentleman_gpu_usage"
+        min: 0
+        max: 100
+        severity:
+          green: 0
+          yellow: 70
+          red: 90 

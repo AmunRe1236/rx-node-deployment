@@ -1,0 +1,62 @@
+# 🎩 Gentleman M1 Node - Lighthouse Server
+pki:
+  ca: ca.crt
+  cert: m1-lighthouse.crt
+  key: m1-lighthouse.key
+
+static_host_map:
+  "192.168.100.10": ["192.168.100.10:4243"]
+  "192.168.100.30": ["192.168.100.30:4243"]
+
+lighthouse:
+  am_lighthouse: true
+  interval: 60
+  hosts: []
+
+listen:
+  host: 0.0.0.0
+  port: 4243
+
+punchy:
+  punch: true
+  respond: true
+  delay: 1s
+
+tun:
+  disabled: false
+  dev: nebula1
+  mtu: 1300
+
+logging:
+  level: info
+  format: text
+
+firewall:
+  conntrack:
+    tcp_timeout: 12m
+    udp_timeout: 3m
+    default_timeout: 10m
+    max_connections: 100000
+
+  outbound:
+    - port: any
+      proto: any
+      host: any
+
+  inbound:
+    - port: any
+      proto: icmp
+      host: any
+    - port: 22
+      proto: tcp
+      host: any
+    - port: 8000-8010
+      proto: tcp
+      host: any
+      groups:
+        - audio-services
+        - clients
+        - monitoring
+    - port: 4243
+      proto: udp
+      host: any

@@ -1,0 +1,92 @@
+# 🍎 GENTLEMAN - M1 Mac Configuration (Audio-Spezialist)
+# ═══════════════════════════════════════════════════════════════
+version: '3.8'
+
+networks:
+  gentleman-mesh:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+
+volumes:
+  gentleman-audio-models:
+  gentleman-logs:
+  gentleman-config:
+
+services:
+  # 🎤 STT SERVICE (Speech-to-Text)
+  stt-service:
+    build:
+      context: ./services/stt-service
+      dockerfile: Dockerfile.m1
+    container_name: gentleman-stt
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=stt-service
+      - GENTLEMAN_NODE_ROLE=audio-specialist
+      - WHISPER_MODEL=base
+    volumes:
+      - gentleman-audio-models:/app/models
+      - gentleman-logs:/app/logs
+      - ./config:/app/config:ro
+    ports:
+      - "8002:8000"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.21.1.20
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🔊 TTS SERVICE (Text-to-Speech)
+  tts-service:
+    build:
+      context: ./services/tts-service
+      dockerfile: Dockerfile.m1
+    container_name: gentleman-tts
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=tts-service
+      - GENTLEMAN_NODE_ROLE=audio-specialist
+      - TTS_MODEL=tts_models/en/ljspeech/tacotron2-DDC
+    volumes:
+      - gentleman-audio-models:/app/models
+      - gentleman-logs:/app/logs
+      - ./config:/app/config:ro
+    ports:
+      - "8003:8000"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.21.1.30
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🔍 DISCOVERY SERVICE (Service Discovery für M1)
+  discovery-service:
+    build:
+      context: ./services/discovery-service
+      dockerfile: Dockerfile
+    container_name: gentleman-discovery
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=discovery-service
+      - GENTLEMAN_NODE_ROLE=m1-mac
+    volumes:
+      - gentleman-logs:/app/logs
+      - ./config:/app/config:ro
+    ports:
+      - "8005:8000"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.21.2.10
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3 

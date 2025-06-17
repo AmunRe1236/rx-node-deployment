@@ -1,0 +1,31 @@
+# 🎩 Gentleman Matrix Update Service Dependencies
+
+# 🌐 Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# 📡 Matrix Client
+matrix-nio==0.20.2
+
+# 🔧 Core Dependencies
+pydantic==2.5.0
+pyyaml==6.0.1
+aiohttp==3.9.1
+python-multipart==0.0.6
+
+# 📊 Monitoring & Logging
+loguru==0.7.2
+prometheus-client==0.19.0
+
+# 🔐 Security
+cryptography==41.0.7
+python-jose[cryptography]==3.3.0
+
+# 🕒 Time & Scheduling
+python-dateutil==2.8.2
+schedule==1.2.0
+
+# 🔧 Utilities
+python-dotenv==1.0.0
+pathlib2==2.3.7
+typing-extensions==4.8.0 

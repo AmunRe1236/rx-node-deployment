@@ -1,0 +1,52 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "rules/*.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  # Gentleman Core Services
+  - job_name: 'gentleman-core'
+    static_configs:
+      - targets: ['192.168.100.10:8001', '192.168.100.20:8002', '192.168.100.20:8003']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # Homelab Services
+  - job_name: 'homelab-services'
+    static_configs:
+      - targets: 
+        - 'gitea:3000'
+        - 'nextcloud:80'
+        - 'homeassistant:8123'
+        - 'jellyfin:8096'
+        - 'vaultwarden:80'
+        - 'pihole:80'
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # System Monitoring
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['host.docker.internal:9100']
+    scrape_interval: 15s
+
+  # Docker Monitoring
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['host.docker.internal:9323']
+    scrape_interval: 15s
+
+  # TrueNAS Monitoring
+  - job_name: 'truenas'
+    static_configs:
+      - targets: ['truenas.local:9100']
+    scrape_interval: 60s
+    metrics_path: /metrics

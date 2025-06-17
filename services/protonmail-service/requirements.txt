@@ -1,0 +1,31 @@
+# 🎩 GENTLEMAN - Proton Mail Service Requirements
+# ═══════════════════════════════════════════════════════════════
+
+# 🚀 FastAPI & Server
+fastapi==0.115.12
+uvicorn[standard]==0.32.1
+pydantic==2.10.4
+
+# 📧 Email Processing
+aiosmtplib==3.0.2
+aiofiles==24.1.0
+email-validator==2.2.0
+
+# 🤖 AI & HTTP
+aiohttp==3.11.10
+httpx==0.28.1
+
+# 📊 Data Processing
+pyyaml==6.0.2
+python-multipart==0.0.20
+
+# 🔐 Security
+cryptography==44.0.0
+python-jose[cryptography]==3.3.0
+
+# 📈 Monitoring
+prometheus-client==0.21.1
+
+# 🔧 Utilities
+python-dotenv==1.0.1
+click==8.1.8 

@@ -1,0 +1,189 @@
+# 🎩 GENTLEMAN Authentication System Configuration
+# ═══════════════════════════════════════════════════════════════
+# Zentralisierte Benutzer- und Passwort-Verwaltung für Homelab
+
+auth_system:
+  provider: "keycloak"  # Modern alternative to noMAD
+  domain: "gentleman.local"
+  
+  # Keycloak Configuration
+  keycloak:
+    realm: "gentleman-homelab"
+    admin_user: "admin"
+    admin_password: "${KEYCLOAK_ADMIN_PASSWORD}"
+    database:
+      type: "postgresql"
+      host: "keycloak-db"
+      name: "keycloak"
+      user: "keycloak"
+      password: "${KEYCLOAK_DB_PASSWORD}"
+    
+    # Service Integration
+    clients:
+      - name: "gitea"
+        client_id: "gitea-client"
+        redirect_uris: ["http://git.gentleman.local:3000/user/oauth2/keycloak/callback"]
+        protocol: "openid-connect"
+        
+      - name: "nextcloud"
+        client_id: "nextcloud-client"
+        redirect_uris: ["http://cloud.gentleman.local:8080/apps/user_oidc/code"]
+        protocol: "openid-connect"
+        
+      - name: "grafana"
+        client_id: "grafana-client"
+        redirect_uris: ["http://localhost:3001/login/generic_oauth"]
+        protocol: "openid-connect"
+        
+      - name: "jellyfin"
+        client_id: "jellyfin-client"
+        redirect_uris: ["http://media.gentleman.local:8096/sso/OID/redirect/keycloak"]
+        protocol: "openid-connect"
+
+      # 💬 Matrix Synapse Integration
+      - name: "matrix"
+        client_id: "matrix-client"
+        redirect_uris: ["http://matrix.gentleman.local:8008/_synapse/client/oidc/callback"]
+        protocol: "openid-connect"
+        scopes: ["openid", "profile", "email"]
+        
+      # 🌐 Element Web Client
+      - name: "element"
+        client_id: "element-client"
+        redirect_uris: ["http://element.gentleman.local:8009/"]
+        protocol: "openid-connect"
+        public_client: true
+
+  # User Groups and Roles
+  groups:
+    - name: "homelab-admins"
+      description: "Full access to all homelab services"
+      members: ["${GENTLEMAN_ADMIN_USER}"]
+      
+    - name: "homelab-users"
+      description: "Standard access to homelab services"
+      members: []
+      
+    - name: "media-users"
+      description: "Access to media services only"
+      members: []
+
+    # 💬 Matrix-specific groups
+    - name: "matrix-admins"
+      description: "Matrix server administrators"
+      members: ["${GENTLEMAN_ADMIN_USER}"]
+      
+    - name: "matrix-users"
+      description: "Matrix chat users"
+      members: []
+
+  # Service-specific roles
+  roles:
+    gitea:
+      - "admin"
+      - "user"
+      - "readonly"
+    nextcloud:
+      - "admin"
+      - "user"
+    grafana:
+      - "admin"
+      - "editor"
+      - "viewer"
+    jellyfin:
+      - "admin"
+      - "user"
+    # 💬 Matrix roles
+    matrix:
+      - "admin"
+      - "moderator"
+      - "user"
+
+# LDAP Alternative Configuration (if preferred)
+ldap_alternative:
+  provider: "openldap"
+  base_dn: "dc=gentleman,dc=local"
+  admin_dn: "cn=admin,dc=gentleman,dc=local"
+  admin_password: "${LDAP_ADMIN_PASSWORD}"
+  
+  organizational_units:
+    - "users"
+    - "groups"
+    - "services"
+  
+  default_groups:
+    - "homelab-users"
+    - "media-users"
+    - "matrix-users"
+
+# macOS Integration (noMAD successor)
+macos_integration:
+  # Use NoMAD Login AD or Jamf Connect for modern macOS integration
+  provider: "jamf_connect"  # or "nomad_login"
+  
+  # Configuration for local macOS user sync
+  local_sync:
+    enabled: true
+    create_local_users: false  # Security: don't create local accounts
+    sync_groups: true
+    mobile_accounts: true
+    
+  # Kerberos configuration
+  kerberos:
+    realm: "GENTLEMAN.LOCAL"
+    kdc: "auth.gentleman.local"
+    admin_server: "auth.gentleman.local"
+
+# 💬 Matrix Integration
+matrix_integration:
+  enabled: true
+  homeserver: "matrix.gentleman.local"
+  
+  # OIDC Configuration
+  oidc:
+    enabled: true
+    provider: "gentleman"
+    client_id: "matrix-client"
+    issuer: "http://auth.gentleman.local:8085/realms/gentleman-homelab"
+    
+  # Auto-join rooms for new users
+  auto_join_rooms:
+    - "#gentleman-general:matrix.gentleman.local"
+    - "#homelab-status:matrix.gentleman.local"
+    
+  # Room creation for services
+  service_rooms:
+    - name: "gentleman-updates"
+      topic: "GENTLEMAN System Updates"
+      admin_only: true
+    - name: "homelab-alerts"
+      topic: "Homelab Monitoring Alerts"
+      admin_only: false
+    - name: "media-requests"
+      topic: "Media Server Requests"
+      admin_only: false
+
+# 🔄 Cross-Service Integration
+service_integration:
+  # Matrix notifications for auth events
+  matrix_notifications:
+    enabled: true
+    room: "#gentleman-updates:matrix.gentleman.local"
+    events:
+      - "user_login"
+      - "user_created"
+      - "password_reset"
+      - "failed_login_attempts"
+      
+  # ProtonMail integration
+  protonmail:
+    enabled: true
+    smtp_host: "${PROTONMAIL_SMTP_HOST}"
+    smtp_port: "${PROTONMAIL_SMTP_PORT}"
+    smtp_user: "${PROTONMAIL_SMTP_USER}"
+    
+  # Monitoring integration
+  monitoring:
+    enabled: true
+    grafana_notifications: true
+    prometheus_metrics: true 

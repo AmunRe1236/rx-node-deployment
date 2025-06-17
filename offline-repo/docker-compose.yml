@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  gitea:
+    image: gitea/gitea:1.21
+    container_name: gentleman-git-server
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=sqlite3
+      - GITEA__database__PATH=/data/gitea/gitea.db
+      - GITEA__server__DOMAIN=192.168.100.1
+      - GITEA__server__SSH_DOMAIN=192.168.100.1
+      - GITEA__server__ROOT_URL=http://192.168.100.1:3010/
+      - GITEA__server__HTTP_PORT=3000
+      - GITEA__server__SSH_PORT=2223
+      - GITEA__security__INSTALL_LOCK=true
+      - GITEA__security__SECRET_KEY=gentleman-mesh-secret-key-2025
+      - GITEA__security__INTERNAL_TOKEN=gentleman-internal-token-mesh-2025
+    restart: always
+    networks:
+      - gentleman-mesh
+    ports:
+      - "3010:3000"
+      - "2223:22"
+    volumes:
+      - gitea-data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  git-sync:
+    image: alpine:latest
+    container_name: gentleman-git-sync
+    environment:
+      - SYNC_INTERVAL=300  # 5 minutes
+      - GITHUB_REPO=https://github.com/amonbaumgartner/Gentleman.git
+      - LOCAL_REPO=/repos/gentleman
+    restart: always
+    networks:
+      - gentleman-mesh
+    volumes:
+      - git-repos:/repos
+      - ./scripts:/scripts:ro
+    command: sh -c "apk add --no-cache git curl && sh /scripts/sync-loop.sh"
+    depends_on:
+      - gitea
+
+networks:
+  gentleman-mesh:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
+
+volumes:
+  gitea-data:
+  git-repos: 

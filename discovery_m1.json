@@ -1,0 +1,75 @@
+{
+  "service": "gentleman-discovery",
+  "node_type": "m1-node",
+  "status": "active",
+  "hardware": "apple_m1",
+  "ip_address": "192.168.68.111",
+  "hostname": "Mac-mini-von-Amon",
+  "services": [
+    {
+      "name": "stt-service",
+      "port": 8002,
+      "endpoint": "http://192.168.68.111:8002",
+      "status": "healthy",
+      "capabilities": ["speech_to_text", "whisper_m1_optimized"]
+    },
+    {
+      "name": "tts-service",
+      "port": 8003,
+      "endpoint": "http://192.168.68.111:8003",
+      "status": "healthy",
+      "capabilities": ["text_to_speech", "m1_neural_engine"]
+    },
+    {
+      "name": "mesh-coordinator",
+      "port": 8004,
+      "endpoint": "http://192.168.68.111:8004",
+      "status": "healthy",
+      "capabilities": ["service_discovery", "mesh_coordination"]
+    },
+    {
+      "name": "web-interface",
+      "port": 8088,
+      "endpoint": "http://192.168.68.111:8088",
+      "status": "healthy",
+      "capabilities": ["web_ui", "dashboard"]
+    },
+    {
+      "name": "keycloak",
+      "port": 8085,
+      "endpoint": "http://192.168.68.111:8085",
+      "status": "healthy",
+      "capabilities": ["authentication", "authorization"]
+    },
+    {
+      "name": "auth-sync",
+      "port": 8091,
+      "endpoint": "http://192.168.68.111:8091",
+      "status": "healthy",
+      "capabilities": ["auth_sync", "user_management"]
+    },
+    {
+      "name": "service-registry",
+      "port": 8500,
+      "endpoint": "http://192.168.68.111:8500",
+      "status": "healthy",
+      "capabilities": ["consul", "service_discovery"]
+    },
+    {
+      "name": "service-bridge",
+      "port": 8093,
+      "endpoint": "http://192.168.68.111:8093",
+      "status": "healthy",
+      "capabilities": ["cross_node_bridge", "mesh_communication"]
+    }
+  ],
+  "mesh_info": {
+    "coordinator_port": 8004,
+    "discovery_enabled": true,
+    "cross_node_compatible": true,
+    "nebula_ip": "192.168.100.20",
+    "external_ip": "192.168.68.111"
+  },
+  "timestamp": "2025-01-15T20:15:00",
+  "node_id": "gentleman-m1-192.168.68.111"
+} 

@@ -1,0 +1,167 @@
+# 🎩 GENTLEMAN Matrix Server
+# ═══════════════════════════════════════════════════════════════
+# Matrix Synapse mit GENTLEMAN Authentication Integration
+
+version: '3.8'
+
+networks:
+  gentleman-mesh:
+    external: true
+  homelab:
+    external: true
+    name: gentleman-homelab
+  auth:
+    external: true
+    name: gentleman-auth
+  matrix:
+    driver: bridge
+
+volumes:
+  matrix-db-data:
+  synapse-data:
+  element-data:
+
+services:
+  # ═══════════════════════════════════════════════════════════════
+  # 🗄️ Matrix Database
+  # ═══════════════════════════════════════════════════════════════
+  
+  matrix-db:
+    image: postgres:15-alpine
+    container_name: gentleman-matrix-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: synapse
+      POSTGRES_USER: synapse
+      POSTGRES_PASSWORD: ${SYNAPSE_DB_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - matrix-db-data:/var/lib/postgresql/data
+    networks:
+      - matrix
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U synapse -d synapse"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ═══════════════════════════════════════════════════════════════
+  # 💬 Matrix Synapse Server
+  # ═══════════════════════════════════════════════════════════════
+  
+  synapse:
+    image: matrixdotorg/synapse:latest
+    container_name: gentleman-synapse
+    restart: unless-stopped
+    depends_on:
+      matrix-db:
+        condition: service_healthy
+    environment:
+      # Database
+      SYNAPSE_SERVER_NAME: matrix.gentleman.local
+      SYNAPSE_REPORT_STATS: "no"
+      SYNAPSE_DB_PASSWORD: ${SYNAPSE_DB_PASSWORD}
+      SYNAPSE_REGISTRATION_SECRET: ${SYNAPSE_REGISTRATION_SECRET}
+      
+      # OIDC Integration
+      MATRIX_OIDC_CLIENT_SECRET: ${MATRIX_OIDC_CLIENT_SECRET}
+      
+      # Admin User
+      SYNAPSE_ADMIN_USER: ${GENTLEMAN_ADMIN_EMAIL}
+      
+    volumes:
+      - synapse-data:/data
+      - ./config/homelab/matrix-synapse-auth.yml:/data/homeserver.yaml:ro
+      - ./config/homelab/matrix-log.config:/data/log.config:ro
+    ports:
+      - "8008:8008"  # Matrix Client API
+      - "9000:9000"  # Metrics
+    networks:
+      - matrix
+      - homelab
+      - auth
+      - gentleman-mesh
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8008/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ═══════════════════════════════════════════════════════════════
+  # 🌐 Element Web Client
+  # ═══════════════════════════════════════════════════════════════
+  
+  element:
+    image: vectorim/element-web:latest
+    container_name: gentleman-element
+    restart: unless-stopped
+    volumes:
+      - ./config/homelab/element-config.json:/app/config.json:ro
+    ports:
+      - "8009:80"
+    networks:
+      - matrix
+      - homelab
+    depends_on:
+      - synapse
+
+  # ═══════════════════════════════════════════════════════════════
+  # 🤖 Matrix Bot für GENTLEMAN Integration
+  # ═══════════════════════════════════════════════════════════════
+  
+  matrix-bot:
+    image: python:3.11-alpine
+    container_name: gentleman-matrix-bot
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "
+      pip install matrix-nio aiohttp pyyaml requests &&
+      python matrix-bot.py
+      "
+    volumes:
+      - ./config/homelab/matrix-bot.py:/app/matrix-bot.py:ro
+      - ./config/homelab/matrix-bot-config.yml:/app/config.yml:ro
+    environment:
+      - MATRIX_HOMESERVER=http://synapse:8008
+      - MATRIX_USER_ID=@gentleman:matrix.gentleman.local
+      - MATRIX_ACCESS_TOKEN=${MATRIX_BOT_ACCESS_TOKEN}
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+    networks:
+      - matrix
+      - auth
+      - homelab
+    depends_on:
+      - synapse
+
+  # ═══════════════════════════════════════════════════════════════
+  # 🔄 Matrix-Auth Sync Service
+  # ═══════════════════════════════════════════════════════════════
+  
+  matrix-auth-sync:
+    image: python:3.11-alpine
+    container_name: gentleman-matrix-auth-sync
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "
+      pip install requests python-keycloak matrix-nio fastapi uvicorn &&
+      python matrix-auth-sync.py
+      "
+    volumes:
+      - ./config/homelab/matrix-auth-sync.py:/app/matrix-auth-sync.py:ro
+    environment:
+      - MATRIX_HOMESERVER=http://synapse:8008
+      - MATRIX_ADMIN_TOKEN=${MATRIX_ADMIN_ACCESS_TOKEN}
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - SYNC_INTERVAL=300  # 5 minutes
+    ports:
+      - "8093:8000"
+    networks:
+      - matrix
+      - auth
+      - homelab
+    depends_on:
+      - synapse 

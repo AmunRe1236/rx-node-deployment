@@ -1,0 +1,218 @@
+# 🎩 GENTLEMAN - Extended Integrations
+# ═══════════════════════════════════════════════════════════════
+# Docker Compose für TrueNAS und Home Assistant Integrationen
+
+version: '3.8'
+
+networks:
+  gentleman-mesh:
+    external: true
+  homeassistant:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+
+volumes:
+  # TrueNAS Mounted Volumes
+  gentleman-models:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=truenas.local,rw,nfsvers=4
+      device: ":/mnt/gentleman/models"
+      
+  gentleman-voices:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=truenas.local,rw,nfsvers=4
+      device: ":/mnt/gentleman/voices"
+      
+  gentleman-logs:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=truenas.local,rw,nfsvers=4
+      device: ":/mnt/gentleman/logs"
+      
+  # Home Assistant Data
+  homeassistant-config:
+  homeassistant-media:
+  
+  # MQTT Broker Data
+  mosquitto-data:
+  mosquitto-logs:
+
+services:
+  # 🏠 HOME ASSISTANT
+  homeassistant:
+    container_name: gentleman-homeassistant
+    image: homeassistant/home-assistant:stable
+    restart: unless-stopped
+    privileged: true
+    environment:
+      - TZ=Europe/Berlin
+      - GENTLEMAN_LLM_ENDPOINT=http://192.168.100.10:8001
+      - GENTLEMAN_STT_ENDPOINT=http://192.168.100.20:8002
+      - GENTLEMAN_TTS_ENDPOINT=http://192.168.100.20:8003
+    volumes:
+      - homeassistant-config:/config
+      - homeassistant-media:/media
+      - ./config/integrations/homeassistant.yaml:/config/gentleman.yaml:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8123:8123"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.2.10
+      homeassistant:
+        ipv4_address: 172.21.1.10
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8123"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      
+  # 📡 MQTT BROKER (für HA Integration)
+  mosquitto:
+    container_name: gentleman-mosquitto
+    image: eclipse-mosquitto:latest
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Berlin
+    volumes:
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-logs:/mosquitto/log
+      - ./config/integrations/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.2.20
+      homeassistant:
+        ipv4_address: 172.21.1.20
+        
+  # 🔗 GENTLEMAN-HA BRIDGE
+  gentleman-ha-bridge:
+    build:
+      context: ./services/ha-bridge
+      dockerfile: Dockerfile
+    container_name: gentleman-ha-bridge
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=ha-bridge
+      - HA_ENDPOINT=http://homeassistant:8123
+      - HA_TOKEN=${HA_ACCESS_TOKEN}
+      - MQTT_BROKER=mosquitto:1883
+      - LLM_ENDPOINT=http://192.168.100.10:8001
+    volumes:
+      - gentleman-logs:/app/logs
+      - ./config/integrations:/app/config:ro
+    ports:
+      - "8124:8000"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.2.30
+      homeassistant:
+        ipv4_address: 172.21.1.30
+    depends_on:
+      - homeassistant
+      - mosquitto
+      
+  # 📊 TRUENAS INTEGRATION SERVICE
+  gentleman-truenas-sync:
+    build:
+      context: ./services/truenas-sync
+      dockerfile: Dockerfile
+    container_name: gentleman-truenas-sync
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=truenas-sync
+      - TRUENAS_HOST=truenas.local
+      - TRUENAS_API_KEY=${TRUENAS_API_KEY}
+      - SYNC_INTERVAL=300  # 5 minutes
+    volumes:
+      - gentleman-models:/sync/models
+      - gentleman-voices:/sync/voices
+      - gentleman-logs:/sync/logs
+      - ./config/integrations/truenas.yaml:/app/config/truenas.yaml:ro
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.2.40
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      
+  # 🎵 MEDIA SERVER (für Voice Responses)
+  gentleman-media-server:
+    build:
+      context: ./services/media-server
+      dockerfile: Dockerfile
+    container_name: gentleman-media-server
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=media-server
+      - MEDIA_PATH=/media
+    volumes:
+      - gentleman-voices:/media/voices:ro
+      - homeassistant-media:/media/homeassistant
+    ports:
+      - "8125:8000"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.2.50
+      homeassistant:
+        ipv4_address: 172.21.1.50
+        
+  # 🔄 BACKUP SERVICE (TrueNAS Integration)
+  gentleman-backup:
+    build:
+      context: ./services/backup
+      dockerfile: Dockerfile
+    container_name: gentleman-backup
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=backup
+      - BACKUP_SCHEDULE=0 2 * * *
+      - TRUENAS_HOST=truenas.local
+      - TRUENAS_API_KEY=${TRUENAS_API_KEY}
+      - S3_BUCKET=${BACKUP_S3_BUCKET}
+      - S3_ACCESS_KEY=${BACKUP_S3_ACCESS_KEY}
+      - S3_SECRET_KEY=${BACKUP_S3_SECRET_KEY}
+    volumes:
+      - gentleman-models:/backup/models:ro
+      - gentleman-voices:/backup/voices:ro
+      - gentleman-logs:/backup/logs:ro
+      - homeassistant-config:/backup/homeassistant:ro
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.2.60
+        
+  # 📈 EXTENDED MONITORING
+  gentleman-integration-monitor:
+    build:
+      context: ./services/integration-monitor
+      dockerfile: Dockerfile
+    container_name: gentleman-integration-monitor
+    restart: unless-stopped
+    environment:
+      - GENTLEMAN_SERVICE=integration-monitor
+      - HA_ENDPOINT=http://homeassistant:8123
+      - HA_TOKEN=${HA_ACCESS_TOKEN}
+      - TRUENAS_HOST=truenas.local
+      - TRUENAS_API_KEY=${TRUENAS_API_KEY}
+      - PROMETHEUS_ENDPOINT=http://prometheus:9090
+    volumes:
+      - gentleman-logs:/app/logs
+    ports:
+      - "8126:8000"
+    networks:
+      gentleman-mesh:
+        ipv4_address: 172.20.2.70
+    depends_on:
+      - homeassistant
+      - mosquitto 

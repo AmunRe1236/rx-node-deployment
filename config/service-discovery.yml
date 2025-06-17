@@ -1,0 +1,139 @@
+# 🎩 GENTLEMAN AI - Service Discovery Configuration
+# Automatische Erkennung von Services im Netzwerk
+
+discovery:
+  # Automatische Service-Erkennung aktivieren
+  auto_discovery: true
+  
+  # Netzwerk-Scan-Bereiche
+  scan_networks:
+    - "192.168.1.0/24"    # Lokales Netzwerk
+    - "192.168.0.0/24"    # Alternative Netzwerk-Range
+    - "10.0.0.0/24"       # Docker-Netzwerk
+    - "172.20.0.0/16"     # Gentleman Docker-Netzwerk
+  
+  # Service-Ports zum Scannen
+  service_ports:
+    llm-server: 8001
+    stt-service: 8002
+    tts-service: 8003
+    mesh-coordinator: 8004
+    web-interface: 8080
+  
+  # Bekannte Nodes (Fallback)
+  known_nodes:
+    m1-mac:
+      hostname: "m1-mac.local"
+      ip_ranges:
+        - "192.168.1.100-200"
+        - "192.168.0.100-200"
+      preferred_services:
+        - "stt-service"
+        - "tts-service"
+        - "web-interface"
+    
+    rx-node:
+      hostname: "rx-node.local"
+      ip_ranges:
+        - "192.168.1.10-50"
+        - "192.168.0.10-50"
+      preferred_services:
+        - "llm-server"
+        - "mesh-coordinator"
+        - "web-interface"
+
+# Service-Prioritäten (welcher Service wo bevorzugt läuft)
+service_preferences:
+  llm-server:
+    preferred_hardware:
+      - "amd_gpu"      # RX 6700 XT
+      - "nvidia_gpu"   # Falls verfügbar
+      - "cpu"          # Fallback
+    
+  stt-service:
+    preferred_hardware:
+      - "apple_silicon" # M1/M2 Mac
+      - "cpu"          # Fallback
+    
+  tts-service:
+    preferred_hardware:
+      - "apple_silicon" # M1/M2 Mac
+      - "cpu"          # Fallback
+    
+  web-interface:
+    preferred_hardware:
+      - "any"          # Kann überall laufen
+    
+  mesh-coordinator:
+    preferred_hardware:
+      - "any"          # Kann überall laufen
+
+# Load Balancing Strategien
+load_balancing:
+  strategy: "hardware_optimized"  # hardware_optimized, round_robin, least_connections
+  
+  health_check_interval: 30  # Sekunden
+  timeout: 5                  # Sekunden
+  retry_attempts: 3
+  
+  failover:
+    enabled: true
+    auto_switch: true
+    fallback_timeout: 10
+
+# Service-Routing-Regeln
+routing:
+  # Intelligentes Routing basierend auf Service-Typ
+  intelligent_routing: true
+  
+  # Service-spezifische Routing-Regeln
+  rules:
+    text_generation:
+      primary: "llm-server"
+      fallback: "web-interface"  # Kann auch einfache Antworten generieren
+    
+    speech_to_text:
+      primary: "stt-service"
+      fallback: null  # Kein Fallback verfügbar
+    
+    text_to_speech:
+      primary: "tts-service"
+      fallback: null  # Kein Fallback verfügbar
+    
+    web_interface:
+      primary: "web-interface"
+      fallback: null
+    
+    coordination:
+      primary: "mesh-coordinator"
+      fallback: "web-interface"  # Kann auch koordinieren
+
+# Monitoring und Metriken
+monitoring:
+  enabled: true
+  collect_metrics: true
+  
+  metrics:
+    - "response_time"
+    - "cpu_usage"
+    - "memory_usage"
+    - "gpu_usage"
+    - "network_latency"
+    - "error_rate"
+  
+  alerts:
+    high_latency_threshold: 2000  # ms
+    high_error_rate_threshold: 0.1  # 10%
+    service_down_timeout: 60  # Sekunden
+
+# Caching für Service-Discovery
+cache:
+  enabled: true
+  ttl: 300  # 5 Minuten
+  refresh_interval: 60  # 1 Minute
+  
+  # Cache-Strategien
+  strategies:
+    service_locations: "memory"
+    health_status: "memory"
+    performance_metrics: "redis"  # Falls verfügbar 

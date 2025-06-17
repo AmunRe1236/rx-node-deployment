@@ -1,0 +1,344 @@
+# 🎩 GENTLEMAN Authentication System
+# ═══════════════════════════════════════════════════════════════
+# Zentralisierte Authentifizierung mit Keycloak + ProtonMail Integration
+
+networks:
+  gentleman-mesh:
+    external: true
+  homelab:
+    external: true
+    name: gentleman-homelab
+  auth:
+    external: true
+    name: gentleman-auth
+
+volumes:
+  keycloak-db-data:
+  keycloak-data:
+  openldap-data:
+  openldap-config:
+  smtp-data:
+  consul-data:
+
+services:
+  # ═══════════════════════════════════════════════════════════════
+  # 🔐 Keycloak Database
+  # ═══════════════════════════════════════════════════════════════
+  
+  keycloak-db:
+    image: postgres:15-alpine
+    container_name: gentleman-keycloak-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
+    networks:
+      - auth
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak -d keycloak"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ═══════════════════════════════════════════════════════════════
+  # 🔐 Keycloak (Identity Provider) mit ProtonMail Integration
+  # ═══════════════════════════════════════════════════════════════
+  
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: gentleman-keycloak
+    restart: unless-stopped
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+    environment:
+      # Database
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      
+      # Keycloak Admin
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      
+      # Keycloak Configuration
+      KC_HOSTNAME: auth.gentleman.local
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HTTP_ENABLED: true
+      KC_PROXY: edge
+      
+      # ProtonMail SMTP Integration
+      KC_SPI_EMAIL_TEMPLATE_PROVIDER: freemarker
+      KC_SPI_EMAIL_TEMPLATE_FREEMARKER_ENABLED: true
+      
+      # Logging
+      KC_LOG_LEVEL: INFO
+      
+    command: start-dev
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+      - ./config/homelab/keycloak:/opt/keycloak/conf:ro
+      - ./config/homelab/email-templates:/opt/keycloak/themes/gentleman/email:ro
+    ports:
+      - "8085:8080"
+    networks:
+      - auth
+      - homelab
+      - gentleman-mesh
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ═══════════════════════════════════════════════════════════════
+  # 📧 ProtonMail Bridge Proxy (für SMTP Integration)
+  # ═══════════════════════════════════════════════════════════════
+  
+  # DISABLED: Not available for ARM64 (M1 Mac)
+  # protonmail-bridge:
+  #   image: shenxn/protonmail-bridge:latest
+  #   container_name: gentleman-protonmail-bridge
+  #   restart: unless-stopped
+  #   environment:
+  #     - PROTONMAIL_USERNAME=${PROTONMAIL_SMTP_USER}
+  #     - PROTONMAIL_PASSWORD=${PROTONMAIL_SMTP_PASSWORD}
+  #   ports:
+  #     - "1025:1025"  # SMTP
+  #     - "1143:1143"  # IMAP
+  #   networks:
+  #     - auth
+  #     - homelab
+  #   volumes:
+  #     - ./config/security/protonmail:/root/.config/protonmail-bridge
+
+  # ═══════════════════════════════════════════════════════════════
+  # 📁 OpenLDAP (Alternative/Backup Directory)
+  # ═══════════════════════════════════════════════════════════════
+  
+  openldap:
+    image: osixia/openldap:latest
+    container_name: gentleman-openldap
+    restart: unless-stopped
+    environment:
+      LDAP_ORGANISATION: "GENTLEMAN Homelab"
+      LDAP_DOMAIN: "gentleman.local"
+      LDAP_ADMIN_PASSWORD: ${LDAP_ADMIN_PASSWORD}
+      LDAP_CONFIG_PASSWORD: ${LDAP_CONFIG_PASSWORD}
+      LDAP_READONLY_USER: true
+      LDAP_READONLY_USER_USERNAME: readonly
+      LDAP_READONLY_USER_PASSWORD: ${LDAP_READONLY_PASSWORD}
+      LDAP_RFC2307BIS_SCHEMA: false
+      LDAP_BACKEND: mdb
+      LDAP_TLS: true
+      LDAP_TLS_CRT_FILENAME: ldap.crt
+      LDAP_TLS_KEY_FILENAME: ldap.key
+      LDAP_TLS_DH_PARAM_FILENAME: dhparam.pem
+      LDAP_TLS_CA_CRT_FILENAME: ca.crt
+      LDAP_TLS_ENFORCE: false
+      LDAP_TLS_CIPHER_SUITE: SECURE256:-VERS-SSL3.0
+      LDAP_TLS_PROTOCOL_MIN: 3.1
+      LDAP_TLS_VERIFY_CLIENT: demand
+      LDAP_REPLICATION: false
+      KEEP_EXISTING_CONFIG: false
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: true
+      LDAP_SSL_HELPER_PREFIX: ldap
+    tty: true
+    stdin_open: true
+    volumes:
+      - openldap-data:/var/lib/ldap
+      - openldap-config:/etc/ldap/slapd.d
+      - ./config/security/certs:/container/service/slapd/assets/certs/:ro
+    ports:
+      - "389:389"
+      - "636:636"
+    networks:
+      - auth
+      - homelab
+    domainname: "gentleman.local"
+    hostname: "ldap"
+
+  # ═══════════════════════════════════════════════════════════════
+  # 🌐 phpLDAPadmin (LDAP Management Interface)
+  # ═══════════════════════════════════════════════════════════════
+  
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: gentleman-phpldapadmin
+    restart: unless-stopped
+    depends_on:
+      - openldap
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: openldap
+      PHPLDAPADMIN_HTTPS: false
+    ports:
+      - "8086:80"
+    networks:
+      - auth
+      - homelab
+
+  # ═══════════════════════════════════════════════════════════════
+  # 📧 E-Mail Authentication Service (Magic Links & Verification)
+  # ═══════════════════════════════════════════════════════════════
+  
+  email-auth:
+    image: python:3.11-alpine
+    container_name: gentleman-email-auth
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "
+      pip install fastapi uvicorn requests python-keycloak smtplib email-validator &&
+      python email-auth.py
+      "
+    volumes:
+      - ./config/homelab/email-auth.py:/app/email-auth.py:ro
+    environment:
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - PROTONMAIL_SMTP_HOST=${PROTONMAIL_SMTP_HOST}
+      - PROTONMAIL_SMTP_PORT=${PROTONMAIL_SMTP_PORT}
+      - PROTONMAIL_SMTP_USER=${PROTONMAIL_SMTP_USER}
+      - PROTONMAIL_SMTP_PASSWORD=${PROTONMAIL_SMTP_PASSWORD}
+      - EMAIL_VERIFICATION_ENABLED=${EMAIL_VERIFICATION_ENABLED}
+      - EMAIL_MAGIC_LINK_ENABLED=${EMAIL_MAGIC_LINK_ENABLED}
+      - EMAIL_MAGIC_LINK_EXPIRY=${EMAIL_MAGIC_LINK_EXPIRY}
+      - EMAIL_DOMAIN_WHITELIST=${EMAIL_DOMAIN_WHITELIST}
+    ports:
+      - "8092:8000"
+    networks:
+      - auth
+      - homelab
+    depends_on:
+      - keycloak
+      # - protonmail-bridge
+
+  # ═══════════════════════════════════════════════════════════════
+  # 🔄 Auth Sync Service (Custom Integration)
+  # ═══════════════════════════════════════════════════════════════
+  
+  auth-sync:
+    image: python:3.11-alpine
+    container_name: gentleman-auth-sync
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "
+      pip install requests python-keycloak ldap3 flask PyYAML &&
+      python auth-sync.py
+      "
+    volumes:
+      - ./config/homelab/auth-sync.py:/app/auth-sync.py:ro
+      - ./config/homelab/auth-system.yml:/app/config.yml:ro
+    environment:
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_ADMIN_USER=admin
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - LDAP_URL=ldap://openldap:389
+      - LDAP_ADMIN_DN=cn=admin,dc=gentleman,dc=local
+      - LDAP_ADMIN_PASSWORD=${LDAP_ADMIN_PASSWORD}
+    networks:
+      - auth
+      - homelab
+    depends_on:
+      - keycloak
+      - openldap
+    ports:
+      - "8091:5000"
+
+  # ═══════════════════════════════════════════════════════════════
+  # 📧 SMTP Relay Service (ProtonMail Alternative für ARM64)
+  # ═══════════════════════════════════════════════════════════════
+  
+  smtp-relay:
+    image: boky/postfix:latest
+    container_name: gentleman-smtp-relay
+    restart: unless-stopped
+    environment:
+      # SMTP Relay Configuration
+      ALLOWED_SENDER_DOMAINS: "gentleman.local gentlemail.com"
+      HOSTNAME: "mail.gentleman.local"
+      
+      # External SMTP (ProtonMail/Gmail/etc.)
+      RELAYHOST: "${EXTERNAL_SMTP_HOST}:${EXTERNAL_SMTP_PORT}"
+      RELAYHOST_USERNAME: "${EXTERNAL_SMTP_USER}"
+      RELAYHOST_PASSWORD: "${EXTERNAL_SMTP_PASSWORD}"
+      RELAYHOST_TLS: "yes"
+      
+      # Security
+      POSTFIX_myhostname: "mail.gentleman.local"
+      POSTFIX_mydomain: "gentleman.local"
+      POSTFIX_myorigin: "gentleman.local"
+      
+    ports:
+      - "2525:587"  # SMTP Submission (changed from 1025)
+    networks:
+      - auth
+      - homelab
+      - gentleman-mesh
+    volumes:
+      - ./config/mail/postfix:/etc/postfix/custom.d:ro
+      - smtp-data:/var/spool/postfix
+
+  # ═══════════════════════════════════════════════════════════════
+  # 🌐 Service Registry & Discovery (Cross-Node Communication)
+  # ═══════════════════════════════════════════════════════════════
+  
+  service-registry:
+    image: hashicorp/consul:latest
+    container_name: gentleman-service-registry
+    restart: unless-stopped
+    command: >
+      consul agent -server -bootstrap-expect=1 -ui -bind=0.0.0.0 
+      -client=0.0.0.0 -datacenter=gentleman-homelab
+    environment:
+      - CONSUL_LOCAL_CONFIG={"datacenter":"gentleman-homelab","server":true,"ui_config":{"enabled":true},"connect":{"enabled":true},"ports":{"grpc":8502}}
+    ports:
+      - "8500:8500"  # HTTP API
+      - "8501:8501"  # HTTPS API  
+      - "8502:8502"  # gRPC API
+      - "8600:8600/udp"  # DNS
+    networks:
+      - auth
+      - homelab
+      - gentleman-mesh
+    volumes:
+      - consul-data:/consul/data
+      - ./config/consul:/consul/config:ro
+
+  # ═══════════════════════════════════════════════════════════════
+  # 🔄 Cross-Node Service Bridge
+  # ═══════════════════════════════════════════════════════════════
+  
+  service-bridge:
+    image: python:3.11-alpine
+    container_name: gentleman-service-bridge
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "
+      pip install consul-python requests flask nebula-python &&
+      python service-bridge.py
+      "
+    volumes:
+      - ./config/homelab/service-bridge.py:/app/service-bridge.py:ro
+      - ./nebula:/app/nebula:ro
+    environment:
+      - CONSUL_HOST=service-registry
+      - CONSUL_PORT=8500
+      - NEBULA_CONFIG_PATH=/app/nebula
+      - NODE_TYPE=${NODE_TYPE:-m1-node}
+      - NODE_IP=${NODE_IP:-192.168.100.20}
+    ports:
+      - "8093:5000"
+    networks:
+      - auth
+      - homelab  
+      - gentleman-mesh
+    depends_on:
+      - service-registry 
