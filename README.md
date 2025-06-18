@@ -154,3 +154,30 @@ Die Skripte erkennen automatisch den Node-Typ:
 **GENTLEMAN Dynamic Cluster System**  
 - 🎮 RX Node (192.168.68.117) - GPU AI Inference Engine  
 - 🖥️ i7 Node(s) - CPU AI Inference Engines 
+
+## 🔐 SSH-Konfiguration
+
+### 🖥️ i7 Node SSH-Key:
+```
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINQijp1/1ByIS46UAZf5fFbRzEkxCyIF8/aZIO9pfHde
+```
+
+**Remote-Zugriff i7 Node:**
+```bash
+# SSH-Verbindung zur i7 Node
+ssh -i ~/.ssh/id_ed25519 user@[i7-node-ip]
+
+# i7 Service-Management
+ssh user@[i7-node-ip] "sudo systemctl status i7-lmstudio"
+ssh user@[i7-node-ip] "sudo systemctl start i7-lmstudio"
+```
+
+**RX Node Remote-Zugriff:**
+```bash
+# SSH-Verbindung zur RX Node (192.168.68.117)
+ssh amon@192.168.68.117
+
+# RX Service-Management
+ssh amon@192.168.68.117 "sudo systemctl status lmstudio-rx"
+ssh amon@192.168.68.117 "sudo systemctl start lmstudio-rx"
+```
