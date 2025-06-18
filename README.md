@@ -6,7 +6,7 @@ Automatisches Deployment-System für RX Node mit AMD GPU-Beschleunigung
 
 ```bash
 # 1. Repository klonen
-git clone http://192.168.68.111:8080/rx-node-deployment.git
+git clone https://github.com/AmunRe1236/rx-node-deployment.git
 cd rx-node-deployment
 
 # 2. Deployment starten
@@ -45,6 +45,29 @@ chmod +x quick_rx_deployment.sh
 ```bash
 # Siehe rx_direct_deploy_command.txt
 ```
+
+## 🧪 RX Node Testsuite:
+
+**Nach dem Deployment die komplette Testsuite ausführen:**
+```bash
+chmod +x test_rx_node.sh
+./test_rx_node.sh
+```
+
+### Test-Bereiche:
+- 🖥️  **System Information** - Hardware & OS Details
+- 🎮 **AMD GPU Detection** - GPU Hardware-Erkennung
+- 🔧 **ROCm Installation** - GPU-Treiber & Tools
+- 🤖 **LM Studio Installation** - Binary & Version Check
+- 🌐 **Network Connectivity** - IP & Port Verfügbarkeit
+- 🔗 **LM Studio API Test** - API Endpoint Verfügbarkeit
+- ⚡ **GPU Inference Performance** - Echte AI-Inferenz mit Timing
+- 📊 **System Resources** - CPU, RAM, Temperatur Monitoring
+
+### Test-Ergebnisse:
+- ✅ **Erfolgs-Rate**: Percentage der erfolgreichen Tests
+- 🎯 **Performance-Ziele**: <30s Antwortzeit für Inferenz
+- 📈 **Detaillierte Logs**: Vollständige Diagnose-Informationen
 
 ## 🌐 Server URLs nach Installation:
 
