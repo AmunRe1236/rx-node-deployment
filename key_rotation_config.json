@@ -1,7 +1,7 @@
 {
   "ssh_keys": {
     "rotation_interval_days": 30,
-    "key_type": "rsa",
+    "key_type": "ed25519",
     "key_size": 4096,
     "backup_count": 5
   },
@@ -16,13 +16,32 @@
     "backup_count": 10
   },
   "nodes": {
+    "i7_node": {
+      "ip": "192.168.68.105",
+      "ssh_user": "amonbaumgartner",
+      "role": "client",
+      "ports": {
+        "gentleman": 8008,
+        "lm_studio": 1235
+      }
+    },
     "rx_node": {
-      "ip": "192.168.100.10",
-      "ssh_user": "amo9n11"
+      "ip": "192.168.68.117",
+      "ssh_user": "amo9n11",
+      "role": "primary_trainer",
+      "ports": {
+        "gentleman": 8008,
+        "lm_studio": 1234
+      }
     },
     "m1_mac": {
-      "ip": "192.168.100.1",
-      "ssh_user": "amo9n11"
+      "ip": "192.168.68.111",
+      "ssh_user": "amo9n11",
+      "role": "coordinator",
+      "ports": {
+        "gentleman": 8007,
+        "git_daemon": 9418
+      }
     }
   }
 }

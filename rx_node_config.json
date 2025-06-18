@@ -1,0 +1,63 @@
+{
+  "node_id": "rx-ArchLinux-Trainer-1734467000",
+  "port": 8008,
+  "role": "primary_trainer",
+  "api_key": "0EH8lZvERxVF5s8YNK-hOJHIxgDDcGjVdROrk6iUGFY",
+  "encryption_enabled": true,
+  "cache_path": "~/.gentleman/talking_cache.db",
+  "knowledge_db_path": "~/Gentleman/knowledge.db",
+  "network": {
+    "discovery_enabled": true,
+    "discovery_port": 8009,
+    "heartbeat_interval": 30,
+    "sync_interval": 300,
+    "timeout": 10
+  },
+  "known_nodes": [
+    {
+      "ip": "192.168.68.111",
+      "port": 8008,
+      "role": "secondary",
+      "name": "m1-mac",
+      "ai_enabled": true,
+      "comment": "M1 Mac - Secondary Node"
+    },
+    {
+      "ip": "192.168.68.117",
+      "port": 8008,
+      "role": "primary_trainer",
+      "name": "rx-node",
+      "ai_enabled": true,
+      "comment": "RX Node - Haupttrainer für AI Knowledge System"
+    },
+    {
+      "ip": "192.168.68.105",
+      "port": 8008,
+      "role": "client",
+      "name": "i7-node",
+      "ai_enabled": true,
+      "comment": "I7 Node - Client mit AI-Unterstützung (lokal)"
+    }
+  ],
+  "capabilities": [
+    "knowledge_training",
+    "gpu_inference",
+    "cluster_management",
+    "distributed_training",
+    "model_serving"
+  ],
+  "ai_integration": {
+    "auto_load_clusters": true,
+    "cache_embeddings": true,
+    "max_cache_size_mb": 500,
+    "inference_timeout": 60,
+    "gpu_enabled": true,
+    "training_mode": true
+  },
+  "hardware": {
+    "gpu_available": true,
+    "memory_gb": 32,
+    "cpu_cores": 16,
+    "specialized_role": "ai_trainer"
+  }
+} 

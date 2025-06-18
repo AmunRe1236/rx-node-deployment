@@ -1,0 +1,34 @@
+{
+  "offline_mode": true,
+  "ssh_keys": {
+    "rotation_interval_days": 30,
+    "key_type": "ed25519",
+    "backup_count": 5,
+    "auto_distribute": false
+  },
+  "current_node": "i7_node",
+  "nodes": {
+    "i7_node": {
+      "ip": "192.168.68.105",
+      "ssh_user": "amonbaumgartner",
+      "role": "client",
+      "status": "local"
+    },
+    "rx_node": {
+      "ip": "192.168.68.117",
+      "ssh_user": "amo9n11",
+      "role": "primary_trainer",
+      "status": "offline"
+    },
+    "m1_mac": {
+      "ip": "192.168.68.111",
+      "ssh_user": "amonbaumgartner",
+      "role": "coordinator",
+      "status": "online"
+    }
+  },
+  "manual_distribution": {
+    "enabled": true,
+    "instructions": "Use distribute_ssh_key.sh for manual key distribution"
+  }
+}
