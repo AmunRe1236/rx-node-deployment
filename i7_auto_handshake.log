@@ -1,0 +1,258 @@
+[2025-06-20 17:18:30] [0;34mℹ️  🧪 Teste I7 Auto-Handshake Konfiguration...[0m
+[2025-06-20 17:18:30] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 17:18:30] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 17:18:30] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 17:18:30] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 17:18:30] [0;31m❌ M1 Handshake Server Port nicht erreichbar[0m
+[2025-06-20 17:18:30] [0;31m❌ M1 Konnektivitätstest fehlgeschlagen[0m
+[2025-06-20 17:18:49] [0;34mℹ️  🧪 Teste I7 Auto-Handshake Konfiguration...[0m
+[2025-06-20 17:18:49] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 17:18:50] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 17:18:50] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 17:18:50] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 17:18:50] [0;32m✅ M1 Handshake Server Port erreichbar[0m
+[2025-06-20 17:18:50] [0;32m✅ M1 Handshake Server Health Check OK[0m
+[2025-06-20 17:18:50] [0;32m✅ M1 Konnektivitätstest erfolgreich[0m
+[2025-06-20 17:18:50] [0;34mℹ️  Teste einmaligen Handshake...[0m
+[2025-06-20 17:18:51] [0;32m✅ Handshake-Test erfolgreich[0m
+[2025-06-20 17:18:51] [0;32m✅ Alle Tests erfolgreich[0m
+[2025-06-20 17:19:02] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 17:19:02] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 17:19:03] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 17:19:03] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 17:19:03] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 17:19:03] [0;32m✅ M1 Handshake Server Port erreichbar[0m
+[2025-06-20 17:19:03] [0;32m✅ M1 Handshake Server Health Check OK[0m
+[2025-06-20 17:19:03] [0;34mℹ️  🚀 Starte I7 Handshake Client...[0m
+[2025-06-20 17:19:08] [0;31m❌ I7 Handshake Client konnte nicht gestartet werden[0m
+[2025-06-20 17:19:08] [0;31m❌ I7 Auto-Handshake Setup fehlgeschlagen[0m
+[2025-06-20 17:24:40] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 17:24:40] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 17:24:40] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 17:24:40] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 17:24:40] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 17:24:40] [0;32m✅ M1 Handshake Server Port erreichbar[0m
+[2025-06-20 17:24:40] [0;32m✅ M1 Handshake Server Health Check OK[0m
+[2025-06-20 17:24:40] [0;34mℹ️  🚀 Starte I7 Handshake Client...[0m
+[2025-06-20 17:24:45] [0;32m✅ I7 Handshake Client gestartet (PID: 12144)[0m
+[2025-06-20 17:24:45] [0;34mℹ️  🔄 Starte Git Sync Client...[0m
+[2025-06-20 17:24:50] [0;32m✅ Git Sync Client gestartet (PID: 12165)[0m
+[2025-06-20 17:24:50] [0;32m✅ I7 Auto-Handshake Setup abgeschlossen[0m
+[2025-06-20 17:24:50] [0;34mℹ️  🔄 Starte kontinuierlichen Service-Monitor...[0m
+[2025-06-20 17:26:26] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 17:26:26] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 17:28:11] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 17:28:11] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 17:29:16] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 17:29:16] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 17:29:17] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 17:29:17] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 17:29:17] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 17:29:17] [0;32m✅ M1 Handshake Server Port erreichbar[0m
+[2025-06-20 17:29:17] [0;32m✅ M1 Handshake Server Health Check OK[0m
+[2025-06-20 17:29:17] [0;34mℹ️  🚀 Starte I7 Handshake Client...[0m
+[2025-06-20 17:29:22] [0;32m✅ I7 Handshake Client gestartet (PID: 12653)[0m
+[2025-06-20 17:29:22] [0;34mℹ️  🔄 Starte Git Sync Client...[0m
+[2025-06-20 17:29:27] [0;32m✅ Git Sync Client gestartet (PID: 12691)[0m
+[2025-06-20 17:29:27] [0;32m✅ I7 Auto-Handshake Setup abgeschlossen[0m
+[2025-06-20 17:29:27] [0;34mℹ️  🔄 Starte kontinuierlichen Service-Monitor...[0m
+[2025-06-20 17:30:42] [1;33m⚠️  Health Check fehlgeschlagen (Versuch 1/5)[0m
+[2025-06-20 17:32:02] [1;33m⚠️  Health Check fehlgeschlagen (Versuch 2/5)[0m
+[2025-06-20 17:33:22] [1;33m⚠️  Health Check fehlgeschlagen (Versuch 3/5)[0m
+[2025-06-20 17:33:27] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 17:33:27] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 17:33:27] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 17:33:27] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 17:34:03] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 17:34:03] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 17:34:03] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 17:34:03] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 17:34:03] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 17:34:03] [0;32m✅ M1 Handshake Server Port erreichbar[0m
+[2025-06-20 17:34:09] [0;31m❌ M1 Handshake Server Health Check fehlgeschlagen[0m
+[2025-06-20 17:34:09] [0;31m❌ M1 Server nicht erreichbar - Setup abgebrochen[0m
+[2025-06-20 17:34:26] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 17:34:26] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 17:34:50] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 17:34:51] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 17:47:55] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 17:47:55] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 17:47:56] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 17:47:56] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 17:47:56] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 17:49:11] [0;31m❌ M1 Handshake Server Port nicht erreichbar[0m
+[2025-06-20 17:49:11] [0;31m❌ M1 Server nicht erreichbar - Setup abgebrochen[0m
+[2025-06-20 17:49:48] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 17:49:48] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 17:49:49] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 17:49:49] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 17:49:49] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 17:49:49] [0;32m✅ M1 Handshake Server Port erreichbar[0m
+[2025-06-20 17:49:49] [0;32m✅ M1 Handshake Server Health Check OK[0m
+[2025-06-20 17:49:49] [0;34mℹ️  🚀 Starte I7 Handshake Client...[0m
+[2025-06-20 17:49:54] [0;32m✅ I7 Handshake Client gestartet (PID: 14117)[0m
+[2025-06-20 17:49:54] [0;34mℹ️  🔄 Starte Git Sync Client...[0m
+[2025-06-20 17:49:59] [0;32m✅ Git Sync Client gestartet (PID: 14134)[0m
+[2025-06-20 17:49:59] [0;32m✅ I7 Auto-Handshake Setup abgeschlossen[0m
+[2025-06-20 17:49:59] [0;34mℹ️  🔄 Starte kontinuierlichen Service-Monitor...[0m
+[2025-06-20 17:58:06] [1;33m⚠️  Health Check fehlgeschlagen (Versuch 1/5)[0m
+[2025-06-20 17:58:11] [1;33m⚠️  Health Check fehlgeschlagen (Versuch 2/5)[0m
+[2025-06-20 17:58:16] [0;32m✅ Health Check erfolgreich[0m
+[2025-06-20 17:58:16] [0;34mℹ️  🤝 Alle Services laufen ordnungsgemäß[0m
+[2025-06-20 17:58:49] [1;33m⚠️  I7 Auto-Handshake läuft bereits (PID: 14073)[0m
+[2025-06-20 18:10:03] [1;33m⚠️  Health Check fehlgeschlagen (Versuch 1/5)[0m
+[2025-06-20 18:10:08] [0;32m✅ Health Check erfolgreich[0m
+[2025-06-20 18:10:08] [0;34mℹ️  🤝 Alle Services laufen ordnungsgemäß[0m
+[2025-06-20 18:10:13] [1;33m⚠️  I7 Auto-Handshake läuft bereits (PID: 14073)[0m
+[2025-06-20 18:11:08] [0;32m✅ Health Check erfolgreich[0m
+[2025-06-20 18:11:08] [0;34mℹ️  🤝 Alle Services laufen ordnungsgemäß[0m
+[2025-06-20 18:23:05] [1;33m⚠️  Health Check fehlgeschlagen (Versuch 1/5)[0m
+[2025-06-20 18:23:10] [0;32m✅ Health Check erfolgreich[0m
+[2025-06-20 18:23:10] [0;34mℹ️  🤝 Alle Services laufen ordnungsgemäß[0m
+[2025-06-20 18:24:10] [0;32m✅ Health Check erfolgreich[0m
+[2025-06-20 18:24:10] [0;34mℹ️  🤝 Alle Services laufen ordnungsgemäß[0m
+[2025-06-20 18:35:17] [1;33m⚠️  Health Check fehlgeschlagen (Versuch 1/5)[0m
+[2025-06-20 18:35:22] [0;32m✅ Health Check erfolgreich[0m
+[2025-06-20 18:35:22] [0;34mℹ️  🤝 Alle Services laufen ordnungsgemäß[0m
+[2025-06-20 18:36:03] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 18:36:03] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 18:36:05] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 18:36:05] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 18:36:06] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 18:36:06] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 18:36:06] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 18:36:06] [0;32m✅ M1 Handshake Server Port erreichbar[0m
+[2025-06-20 18:36:06] [0;32m✅ M1 Handshake Server Health Check OK[0m
+[2025-06-20 18:36:06] [0;34mℹ️  🚀 Starte I7 Handshake Client...[0m
+[2025-06-20 18:36:11] [0;32m✅ I7 Handshake Client gestartet (PID: 17358)[0m
+[2025-06-20 18:36:11] [0;34mℹ️  🔄 Starte Git Sync Client...[0m
+[2025-06-20 18:36:16] [0;32m✅ Git Sync Client gestartet (PID: 17375)[0m
+[2025-06-20 18:36:16] [0;32m✅ I7 Auto-Handshake Setup abgeschlossen[0m
+[2025-06-20 18:36:16] [0;34mℹ️  🔄 Starte kontinuierlichen Service-Monitor...[0m
+[2025-06-20 18:36:16] [0;32m✅ Health Check erfolgreich[0m
+[2025-06-20 18:36:16] [0;34mℹ️  🤝 Alle Services laufen ordnungsgemäß[0m
+[2025-06-20 18:36:22] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 18:36:22] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 18:37:01] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 18:37:01] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 18:37:01] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 18:37:01] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 18:37:01] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 18:37:01] [0;32m✅ M1 Handshake Server Port erreichbar[0m
+[2025-06-20 18:37:01] [0;32m✅ M1 Handshake Server Health Check OK[0m
+[2025-06-20 18:37:01] [0;34mℹ️  🚀 Starte I7 Handshake Client...[0m
+[2025-06-20 18:37:06] [0;32m✅ I7 Handshake Client gestartet (PID: 17519)[0m
+[2025-06-20 18:37:06] [0;34mℹ️  🔄 Starte Git Sync Client...[0m
+[2025-06-20 18:37:11] [0;32m✅ Git Sync Client gestartet (PID: 17537)[0m
+[2025-06-20 18:37:11] [0;32m✅ I7 Auto-Handshake Setup abgeschlossen[0m
+[2025-06-20 18:37:11] [0;34mℹ️  🔄 Starte kontinuierlichen Service-Monitor...[0m
+[2025-06-20 18:37:16] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 18:37:16] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 18:46:08] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 18:46:08] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 18:51:00] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 18:51:00] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 19:00:09] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 19:00:09] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 19:00:11] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 19:00:11] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 19:00:11] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 19:00:11] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 19:00:16] [0;31m❌ M1 Host nicht erreichbar[0m
+[2025-06-20 19:00:16] [0;31m❌ M1 Server nicht erreichbar - Setup abgebrochen[0m
+[2025-06-20 19:00:16] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 19:00:16] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 19:03:34] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 19:03:34] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 19:03:36] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 19:03:36] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 19:03:37] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 19:03:37] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 19:03:37] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 19:03:59] [0;31m❌ M1 Handshake Server Port nicht erreichbar[0m
+[2025-06-20 19:03:59] [0;31m❌ M1 Server nicht erreichbar - Setup abgebrochen[0m
+[2025-06-20 19:17:32] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 19:17:32] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 19:17:53] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 19:17:53] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 19:22:00] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 19:22:00] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 19:22:02] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 19:22:02] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 19:22:03] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 19:22:03] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 19:22:03] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 19:23:18] [0;31m❌ M1 Handshake Server Port nicht erreichbar[0m
+[2025-06-20 19:23:18] [0;31m❌ M1 Server nicht erreichbar - Setup abgebrochen[0m
+[2025-06-20 19:32:10] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 19:32:10] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 19:43:29] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 19:43:29] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 19:43:31] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 19:43:31] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 19:43:32] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 19:43:32] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 19:43:32] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 19:44:47] [0;31m❌ M1 Handshake Server Port nicht erreichbar[0m
+[2025-06-20 19:44:47] [0;31m❌ M1 Server nicht erreichbar - Setup abgebrochen[0m
+[2025-06-20 19:51:59] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 19:51:59] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 20:01:03] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 20:01:03] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 20:01:05] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 20:01:05] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 20:01:06] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 20:01:06] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 20:01:10] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 20:01:10] [0;31m❌ M1 Handshake Server Port nicht erreichbar[0m
+[2025-06-20 20:01:10] [0;31m❌ M1 Server nicht erreichbar - Setup abgebrochen[0m
+[2025-06-20 20:04:41] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 20:04:41] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 20:05:42] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 20:05:42] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 20:05:44] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 20:05:44] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 20:05:45] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 20:05:45] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 20:05:45] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 20:05:45] [0;32m✅ M1 Handshake Server Port erreichbar[0m
+[2025-06-20 20:05:45] [0;32m✅ M1 Handshake Server Health Check OK[0m
+[2025-06-20 20:05:45] [0;34mℹ️  🚀 Starte I7 Handshake Client...[0m
+[2025-06-20 20:05:50] [0;32m✅ I7 Handshake Client gestartet (PID: 39285)[0m
+[2025-06-20 20:05:50] [0;34mℹ️  🔄 Starte Git Sync Client...[0m
+[2025-06-20 20:05:55] [0;32m✅ Git Sync Client gestartet (PID: 39320)[0m
+[2025-06-20 20:05:55] [0;32m✅ I7 Auto-Handshake Setup abgeschlossen[0m
+[2025-06-20 20:05:55] [0;34mℹ️  🔄 Starte kontinuierlichen Service-Monitor...[0m
+[2025-06-20 20:05:55] [0;32m✅ Health Check erfolgreich[0m
+[2025-06-20 20:05:55] [0;34mℹ️  🤝 Alle Services laufen ordnungsgemäß[0m
+[2025-06-20 20:11:50] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 20:11:50] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 20:11:54] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 20:11:54] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 20:11:54] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 20:11:54] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 20:11:58] [0;31m❌ M1 Host nicht erreichbar[0m
+[2025-06-20 20:11:58] [0;31m❌ M1 Server nicht erreichbar - Setup abgebrochen[0m
+[2025-06-20 22:05:54] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 22:05:55] [0;32m✅ Alle Services gestoppt[0m
+[2025-06-20 22:09:13] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 22:09:13] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 22:09:14] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 22:09:14] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 22:09:14] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 22:10:29] [0;31m❌ M1 Handshake Server Port nicht erreichbar[0m
+[2025-06-20 22:10:29] [0;31m❌ M1 Server nicht erreichbar - Setup abgebrochen[0m
+[2025-06-20 22:25:45] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 22:25:45] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 22:25:45] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 22:25:45] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 22:25:45] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 22:27:00] [0;31m❌ M1 Handshake Server Port nicht erreichbar[0m
+[2025-06-20 22:27:00] [0;31m❌ M1 Server nicht erreichbar - Setup abgebrochen[0m
+[2025-06-20 22:33:56] [0;34mℹ️  🚀 Starte GENTLEMAN I7 Auto-Handshake...[0m
+[2025-06-20 22:33:56] [0;34mℹ️  🔄 Aktualisiere Repository...[0m
+[2025-06-20 22:33:56] [0;32m✅ Repository von GitHub aktualisiert[0m
+[2025-06-20 22:33:56] [0;34mℹ️  🔍 Teste Verbindung zum M1 Handshake Server...[0m
+[2025-06-20 22:33:56] [0;32m✅ M1 Host erreichbar[0m
+[2025-06-20 22:34:46] [0;34mℹ️  🛑 Stoppe I7 Auto-Handshake Services...[0m
+[2025-06-20 22:34:46] [0;32m✅ Alle Services gestoppt[0m

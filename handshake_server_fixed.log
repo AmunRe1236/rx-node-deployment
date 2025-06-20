@@ -1,0 +1,12 @@
+2025-06-20 22:23:02,609 - INFO - 🚀 Handshake Server gestartet auf 0.0.0.0:8765
+2025-06-20 22:23:02,609 - INFO - 📡 Endpoints verfügbar:
+2025-06-20 22:23:02,609 - INFO -    POST /handshake               - Node Registrierung
+2025-06-20 22:23:02,609 - INFO -    GET  /status                  - Cluster Status
+2025-06-20 22:23:02,609 - INFO -    GET  /nodes                   - Aktive Nodes
+2025-06-20 22:23:02,609 - INFO -    GET  /health                  - Health Check
+2025-06-20 22:23:02,609 - INFO -    POST /admin/shutdown          - M1 Mac Remote Shutdown
+2025-06-20 22:23:02,609 - INFO -    POST /admin/bootup            - M1 Mac Remote Bootup (Wake-on-LAN)
+2025-06-20 22:23:02,610 - INFO -    POST /admin/rx-node/shutdown  - RX Node Remote Shutdown
+2025-06-20 22:23:02,610 - INFO -    POST /admin/rx-node/wakeup    - RX Node Wake-on-LAN
+2025-06-20 22:23:02,610 - INFO -    GET  /admin/rx-node/status    - RX Node Status Check
+2025-06-20 22:23:16,175 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -

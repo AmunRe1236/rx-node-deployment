@@ -73,29 +73,31 @@ test_m1_connectivity() {
     
     local m1_host="192.168.68.111"
     local handshake_port="8765"
+    local tunnel_url="https://century-pam-every-trouble.trycloudflare.com"
     
     # Ping Test
     if ping -c 1 -W 3000 "$m1_host" > /dev/null 2>&1; then
         log_success "M1 Host erreichbar"
-    else
-        log_error "M1 Host nicht erreichbar"
-        return 1
+        
+        # Port Test für lokale Verbindung
+        if nc -z -w 3 "$m1_host" "$handshake_port" 2>/dev/null; then
+            log_success "M1 Handshake Server Port erreichbar"
+            
+            # Health Check lokal
+            if curl -s -f --max-time 5 "http://$m1_host:$handshake_port/health" > /dev/null 2>&1; then
+                log_success "M1 Handshake Server Health Check OK"
+                return 0
+            fi
+        fi
     fi
     
-    # Port Test
-    if nc -z -w 3 "$m1_host" "$handshake_port" 2>/dev/null; then
-        log_success "M1 Handshake Server Port erreichbar"
-    else
-        log_error "M1 Handshake Server Port nicht erreichbar"
-        return 1
-    fi
-    
-    # Health Check
-    if curl -s -f --max-time 5 "http://$m1_host:$handshake_port/health" > /dev/null 2>&1; then
-        log_success "M1 Handshake Server Health Check OK"
+    # Fallback: Teste Cloudflare Tunnel
+    log_info "🌐 Teste Cloudflare Tunnel Verbindung..."
+    if curl -s -f --max-time 8 "$tunnel_url/health" > /dev/null 2>&1; then
+        log_success "M1 Handshake Server über Tunnel erreichbar"
         return 0
     else
-        log_error "M1 Handshake Server Health Check fehlgeschlagen"
+        log_error "M1 Server weder lokal noch über Tunnel erreichbar"
         return 1
     fi
 }

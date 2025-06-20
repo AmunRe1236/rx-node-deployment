@@ -1,0 +1,16 @@
+2025-06-20 20:05:47,785 - INFO - 🚀 I7 Handshake Client initialisiert
+2025-06-20 20:05:47,786 - INFO -    Node ID: i7-development-node
+2025-06-20 20:05:47,786 - INFO -    Lokale IP: 192.168.68.105
+2025-06-20 20:05:47,786 - INFO -    M1 Server: 192.168.68.111:8765
+2025-06-20 20:05:47,786 - INFO - 🚀 Starte I7 Handshake Client als Daemon
+2025-06-20 20:05:47,786 - INFO - 🔄 Starte kontinuierlichen Handshake-Loop
+2025-06-20 20:05:48,113 - INFO - ✅ Handshake erfolgreich
+2025-06-20 20:05:48,114 - INFO -    Server Response: Node i7-development-node registered
+2025-06-20 20:06:48,250 - ERROR - Fehler beim Handshake: HTTPConnectionPool(host='192.168.68.111', port=8765): Read timed out. (read timeout=30)
+2025-06-20 20:07:23,260 - WARNING - M1 Server nicht erreichbar
+2025-06-20 20:07:58,268 - WARNING - M1 Server nicht erreichbar
+2025-06-20 20:08:33,275 - WARNING - M1 Server nicht erreichbar
+2025-06-20 20:09:08,284 - WARNING - M1 Server nicht erreichbar
+2025-06-20 20:09:43,293 - WARNING - M1 Server nicht erreichbar
+2025-06-20 20:10:18,326 - WARNING - M1 Server nicht erreichbar
+2025-06-20 20:10:53,334 - WARNING - M1 Server nicht erreichbar

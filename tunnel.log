@@ -1,0 +1,54 @@
+2025-06-20T20:43:13Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2025-06-20T20:43:13Z INF Requesting new quick Tunnel on trycloudflare.com...
+2025-06-20T20:43:19Z INF +--------------------------------------------------------------------------------------------+
+2025-06-20T20:43:19Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2025-06-20T20:43:19Z INF |  https://dh-sciences-male-lid.trycloudflare.com                                            |
+2025-06-20T20:43:19Z INF +--------------------------------------------------------------------------------------------+
+2025-06-20T20:43:19Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2025-06-20T20:43:19Z INF Version 2025.6.1 (Checksum 4e86ed450b96bb8293eed28fbe48f085e818c7bc56a0e9a059e2d924e78c83fe)
+2025-06-20T20:43:19Z INF GOOS: darwin, GOVersion: go1.24.4, GoArch: amd64
+2025-06-20T20:43:19Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:8765]
+2025-06-20T20:43:19Z INF cloudflared will not automatically update if installed by a package manager.
+2025-06-20T20:43:24Z INF Generated Connector ID: bf238147-41c5-406a-b113-8d375561f017
+2025-06-20T20:43:24Z INF Initial protocol quic
+2025-06-20T20:43:24Z INF ICMP proxy will use 172.20.10.6 as source for IPv4
+2025-06-20T20:43:24Z INF ICMP proxy will use fe80::1888:ebd8:84b3:4100 in zone en0 as source for IPv6
+2025-06-20T20:43:24Z INF Created ICMP proxy listening on 172.20.10.6:0
+2025-06-20T20:43:24Z INF ICMP proxy will use 172.20.10.6 as source for IPv4
+2025-06-20T20:43:24Z INF ICMP proxy will use fe80::1888:ebd8:84b3:4100 in zone en0 as source for IPv6
+2025-06-20T20:43:24Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2025-06-20T20:43:24Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(25497) CurveP256] connIndex=0 event=0 ip=198.41.200.63
+2025-06-20T20:43:25Z INF Registered tunnel connection connIndex=0 connection=a6f76f95-5d8c-42b1-be3c-1963ca15c60c event=0 ip=198.41.200.63 location=vie05 protocol=quic
+2025-06-20T20:45:39Z ERR Failed to serve tunnel connection error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.63
+2025-06-20T20:45:39Z ERR Serve tunnel error error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.63
+2025-06-20T20:45:39Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.63
+2025-06-20T20:45:41Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(25497) CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2025-06-20T20:45:41Z INF Registered tunnel connection connIndex=0 connection=af04e730-cb8e-45a5-b264-ce8e7e3a49b0 event=0 ip=198.41.200.73 location=vie06 protocol=quic
+2025-06-20T20:53:25Z WRN Failed to serve tunnel connection error="write udp4 0.0.0.0:51328->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.73
+2025-06-20T20:53:25Z ERR Serve tunnel error error="write udp4 0.0.0.0:51328->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.73
+2025-06-20T20:53:25Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.73
+2025-06-20T20:53:26Z ERR Connection terminated error="write udp4 0.0.0.0:51328->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=0
+2025-06-20T20:53:30Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(25497) CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2025-06-20T20:53:30Z ERR Failed to dial a quic connection error="failed to dial to edge with quic: write udp4 0.0.0.0:51328->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.200.73
+2025-06-20T20:53:30Z INF Retrying connection in up to 4s connIndex=0 event=0 ip=198.41.200.73
+2025-06-20T20:53:30Z ERR Connection terminated error="failed to dial to edge with quic: write udp4 0.0.0.0:51328->198.41.200.73:7844: sendmsg: network is unreachable" connIndex=0
+2025-06-20T20:53:49Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(25497) CurveP256] connIndex=0 event=0 ip=198.41.192.57
+2025-06-20T20:53:49Z INF Registered tunnel connection connIndex=0 connection=39750dab-ddc1-40d5-aee9-0f7cb8048550 event=0 ip=198.41.192.57 location=vie07 protocol=quic
+2025-06-20T20:57:07Z ERR Failed to serve tunnel connection error="write udp4 0.0.0.0:51328->198.41.192.57:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.57
+2025-06-20T20:57:07Z ERR Serve tunnel error error="write udp4 0.0.0.0:51328->198.41.192.57:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.57
+2025-06-20T20:57:07Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.57
+2025-06-20T20:57:07Z ERR Connection terminated error="write udp4 0.0.0.0:51328->198.41.192.57:7844: sendmsg: network is unreachable" connIndex=0
+2025-06-20T20:57:27Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(25497) CurveP256] connIndex=0 event=0 ip=198.41.192.57
+2025-06-20T20:57:27Z INF Registered tunnel connection connIndex=0 connection=88b22950-022c-4929-9592-a9d36c3220c2 event=0 ip=198.41.192.57 location=vie07 protocol=quic
+2025-06-20T21:32:32Z WRN Failed to serve tunnel connection error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.57
+2025-06-20T21:32:32Z ERR Serve tunnel error error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.57
+2025-06-20T21:32:32Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.57
+2025-06-20T21:32:34Z ERR Connection terminated error="timeout: no recent network activity" connIndex=0
+2025-06-20T21:32:36Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(25497) CurveP256] connIndex=0 event=0 ip=198.41.192.37
+2025-06-20T21:32:36Z INF Registered tunnel connection connIndex=0 connection=e68919fa-1d04-4984-9fd6-ed03a26a5257 event=0 ip=198.41.192.37 location=vie07 protocol=quic
+2025-06-20T21:39:41Z WRN Failed to serve tunnel connection error="write udp4 0.0.0.0:51328->198.41.192.37:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.37
+2025-06-20T21:39:41Z ERR Serve tunnel error error="write udp4 0.0.0.0:51328->198.41.192.37:7844: sendmsg: network is unreachable" connIndex=0 event=0 ip=198.41.192.37
+2025-06-20T21:39:41Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.37
+2025-06-20T21:39:42Z ERR Connection terminated error="write udp4 0.0.0.0:51328->198.41.192.37:7844: sendmsg: network is unreachable" connIndex=0
+2025-06-20T21:39:55Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(25497) CurveP256] connIndex=0 event=0 ip=198.41.192.37
+2025-06-20T21:39:56Z INF Registered tunnel connection connIndex=0 connection=02f5da5c-11ed-4fb8-82cb-e907347c640b event=0 ip=198.41.192.37 location=vie07 protocol=quic

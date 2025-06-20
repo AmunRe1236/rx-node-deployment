@@ -1,0 +1,43 @@
+2025-06-20 20:05:52,744 - INFO - 🔄 Starte kontinuierlichen Sync (alle 30 Sekunden)
+2025-06-20 20:05:52,745 - INFO - 🚀 Starte I7 Gitea Sync Cycle
+2025-06-20 20:05:52,759 - ERROR - ❌ Git Daemon Fehler: fatal: unable to connect to 192.168.68.111:
+192.168.68.111[0: 192.168.68.111]: errno=Connection refused
+
+
+2025-06-20 20:05:52,759 - ERROR - ❌ Keine Verbindung zum Git Server
+2025-06-20 20:06:22,763 - INFO - 🚀 Starte I7 Gitea Sync Cycle
+2025-06-20 20:06:22,788 - ERROR - ❌ Git Daemon Fehler: fatal: unable to connect to 192.168.68.111:
+192.168.68.111[0: 192.168.68.111]: errno=Connection refused
+
+
+2025-06-20 20:06:22,788 - ERROR - ❌ Keine Verbindung zum Git Server
+2025-06-20 20:06:52,792 - INFO - 🚀 Starte I7 Gitea Sync Cycle
+2025-06-20 20:06:52,826 - ERROR - ❌ Git Daemon Fehler: fatal: unable to connect to 192.168.68.111:
+192.168.68.111[0: 192.168.68.111]: errno=Connection refused
+
+
+2025-06-20 20:06:52,827 - ERROR - ❌ Keine Verbindung zum Git Server
+2025-06-20 20:07:22,829 - INFO - 🚀 Starte I7 Gitea Sync Cycle
+2025-06-20 20:07:22,857 - ERROR - ❌ Git Daemon Fehler: fatal: unable to connect to 192.168.68.111:
+192.168.68.111[0: 192.168.68.111]: errno=Connection refused
+
+
+2025-06-20 20:07:22,858 - ERROR - ❌ Keine Verbindung zum Git Server
+2025-06-20 20:07:52,858 - INFO - 🚀 Starte I7 Gitea Sync Cycle
+2025-06-20 20:08:02,870 - ERROR - ❌ Konnektivitätstest fehlgeschlagen: Command '['git', 'ls-remote', 'git://192.168.68.111:9418/Gentleman']' timed out after 10 seconds
+2025-06-20 20:08:02,871 - ERROR - ❌ Keine Verbindung zum Git Server
+2025-06-20 20:08:32,875 - INFO - 🚀 Starte I7 Gitea Sync Cycle
+2025-06-20 20:08:42,886 - ERROR - ❌ Konnektivitätstest fehlgeschlagen: Command '['git', 'ls-remote', 'git://192.168.68.111:9418/Gentleman']' timed out after 10 seconds
+2025-06-20 20:08:42,887 - ERROR - ❌ Keine Verbindung zum Git Server
+2025-06-20 20:09:12,888 - INFO - 🚀 Starte I7 Gitea Sync Cycle
+2025-06-20 20:09:22,898 - ERROR - ❌ Konnektivitätstest fehlgeschlagen: Command '['git', 'ls-remote', 'git://192.168.68.111:9418/Gentleman']' timed out after 10 seconds
+2025-06-20 20:09:22,899 - ERROR - ❌ Keine Verbindung zum Git Server
+2025-06-20 20:09:52,904 - INFO - 🚀 Starte I7 Gitea Sync Cycle
+2025-06-20 20:10:02,913 - ERROR - ❌ Konnektivitätstest fehlgeschlagen: Command '['git', 'ls-remote', 'git://192.168.68.111:9418/Gentleman']' timed out after 10 seconds
+2025-06-20 20:10:02,914 - ERROR - ❌ Keine Verbindung zum Git Server
+2025-06-20 20:10:32,914 - INFO - 🚀 Starte I7 Gitea Sync Cycle
+2025-06-20 20:10:42,922 - ERROR - ❌ Konnektivitätstest fehlgeschlagen: Command '['git', 'ls-remote', 'git://192.168.68.111:9418/Gentleman']' timed out after 10 seconds
+2025-06-20 20:10:42,923 - ERROR - ❌ Keine Verbindung zum Git Server
+2025-06-20 20:11:12,926 - INFO - 🚀 Starte I7 Gitea Sync Cycle
+2025-06-20 20:11:22,934 - ERROR - ❌ Konnektivitätstest fehlgeschlagen: Command '['git', 'ls-remote', 'git://192.168.68.111:9418/Gentleman']' timed out after 10 seconds
+2025-06-20 20:11:22,934 - ERROR - ❌ Keine Verbindung zum Git Server

@@ -1,134 +1,242 @@
-# 🎮 RX NODE - LLM POWERHOUSE SETUP
-═══════════════════════════════════════════════════════════════
+# 🎯 GENTLEMAN RX Node Setup Guide
 
-## 🎯 **Architektur-Übersicht**
+## Übersicht
 
-### 🎮 **RX Node (AMD RX 6700 XT)** - LLM-Spezialist
+Dieses Setup integriert die RX Node vollständig ins GENTLEMAN Cluster und ermöglicht es dem M1 Mac, als zentraler Knotenpunkt zu fungieren, der die RX Node fernsteuern kann.
+
+## 📋 Voraussetzungen
+
+- **RX Node**: Arch Linux System
+- **M1 Mac**: macOS mit GENTLEMAN System
+- **Netzwerk**: Beide Geräte im gleichen Heimnetzwerk (192.168.68.x)
+
+## 🚀 Setup-Prozess
+
+### Schritt 1: RX Node Netzwerk & SSH Setup
+
+**Auf der RX Node ausführen:**
+
+```bash
+# Skript zur RX Node kopieren (per USB, scp, etc.)
+sudo ./rx_node_network_setup.sh
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    🎮 RX NODE (192.168.100.10)             │
-├─────────────────────────────────────────────────────────────┤
-│  🧠 LLM-Server (8001)     - Hauptaufgabe: Große Modelle    │
-│  🌐 Web-Interface (8080)  - Request Handler                │
-│  🔗 Mesh-Coordinator (8004) - Nebula-Verbindung           │
-│  📝 Log-Aggregator (8005) - Zentrale Logs                 │
-│  📊 Prometheus (9090)     - Monitoring                     │
-└─────────────────────────────────────────────────────────────┘
+
+**Was das Skript macht:**
+- ✅ System-Pakete aktualisieren
+- ✅ Netzwerk konfigurieren (statische IP: 192.168.68.117)
+- ✅ SSH Server sicher einrichten
+- ✅ Benutzer 'amo9n11' konfigurieren
+- ✅ Wake-on-LAN aktivieren
+- ✅ Firewall konfigurieren
+- ✅ GENTLEMAN Konfigurationsdateien erstellen
+
+### Schritt 2: SSH-Integration vom M1 Mac
+
+**Auf dem M1 Mac ausführen:**
+
+```bash
+# SSH Keys zur RX Node kopieren und Integration
+./setup_rx_node_ssh.sh
+```
+
+**Was das Skript macht:**
+- ✅ SSH Keys zur RX Node kopieren
+- ✅ SSH-Konfiguration aktualisieren
+- ✅ Verbindungstests durchführen
+- ✅ M1 Handshake Server für RX Node konfigurieren
+- ✅ Remote Control testen
+
+## 🎛️ Verfügbare Steuerungsmöglichkeiten
+
+### M1 Mac als zentraler Knotenpunkt
+
+```bash
+# RX Node über M1 Mac API steuern
+./m1_rx_node_control.sh status      # Status prüfen
+./m1_rx_node_control.sh shutdown    # Herunterfahren
+./m1_rx_node_control.sh shutdown 5  # In 5 Minuten herunterfahren
+./m1_rx_node_control.sh wakeup      # Aufwecken (Wake-on-LAN)
+```
+
+### Direkte SSH-Steuerung
+
+```bash
+# Kurzer SSH-Zugriff
+ssh rx-node
+
+# Direkte Befehle
+ssh rx-node "sudo shutdown -h now"
+ssh rx-node "systemctl status sshd"
+ssh rx-node "gentleman-status"
+```
+
+### Alternative Steuerung
+
+```bash
+# Ursprüngliches RX Node Control Skript
+./rx_node_control.sh status
+./rx_node_control.sh shutdown
+./rx_node_control.sh wakeup
+```
+
+## 🌐 Netzwerk-Konfiguration
+
+| Node | IP-Adresse | Rolle |
+|------|------------|-------|
+| M1 Mac | 192.168.68.111 | Master/Gateway |
+| I7 Laptop | 192.168.68.105 | Client |
+| RX Node | 192.168.68.117 | Receiver |
+
+## 🔧 M1 Handshake Server API
+
+Der M1 Handshake Server wurde erweitert mit neuen RX Node Endpoints:
+
+```bash
+# RX Node Status prüfen
+curl http://localhost:8765/admin/rx-node/status
+
+# RX Node herunterfahren
+curl -X POST http://localhost:8765/admin/rx-node/shutdown \
+     -H "Content-Type: application/json" \
+     -d '{"source": "API Test", "delay_minutes": 1}'
+
+# RX Node aufwecken
+curl -X POST http://localhost:8765/admin/rx-node/wakeup \
+     -H "Content-Type: application/json" \
+     -d '{"source": "API Test"}'
+```
+
+## 🔍 Status und Überwachung
+
+### RX Node Status prüfen
+
+```bash
+# Auf der RX Node
+gentleman-status
+
+# Vom M1 Mac aus
+ssh rx-node "gentleman-status"
+./m1_rx_node_control.sh status
+```
+
+### M1 Handshake Server Status
+
+```bash
+# Health Check
+curl http://localhost:8765/health
+
+# Cluster Status
+curl http://localhost:8765/status
+```
+
+## 🛠️ Troubleshooting
+
+### SSH-Probleme
+
+```bash
+# SSH-Verbindung testen
+ssh -vvv rx-node
+
+# SSH Keys neu kopieren
+ssh-copy-id -i ~/.ssh/gentleman_key.pub amo9n11@192.168.68.117
+```
+
+### Netzwerk-Probleme
+
+```bash
+# Ping-Test
+ping 192.168.68.117
+
+# Netzwerk-Status auf RX Node
+ssh rx-node "ip addr show"
+ssh rx-node "systemctl status NetworkManager"
+```
+
+### M1 Handshake Server Probleme
+
+```bash
+# Server neu starten
+./handshake_m1.sh
+
+# Logs prüfen
+tail -f /tmp/m1_handshake_server.log
+```
+
+## 🎯 Architektur
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   I7 Laptop     │    │     M1 Mac      │    │    RX Node      │
+│ 192.168.68.105  │    │ 192.168.68.111  │    │ 192.168.68.117  │
+│                 │    │                 │    │                 │
+│ • Hotspot Mode  │◄──►│ • Master Node   │◄──►│ • Receiver      │
+│ • Auto-Handshake│    │ • API Gateway   │    │ • SSH Server    │
+│ • Remote Control│    │ • Tunnel Manager│    │ • Wake-on-LAN   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
                               │
-                         Nebula Mesh
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                    🍎 M1 MAC (192.168.100.1)               │
-├─────────────────────────────────────────────────────────────┤
-│  🎤 STT-Service (8002)    - Whisper Speech-to-Text         │
-│  🗣️ TTS-Service (8003)    - Text-to-Speech                 │
-│  📡 Discovery Service     - Service Discovery              │
-│  🏠 Nebula Lighthouse     - Mesh-Koordination              │
-└─────────────────────────────────────────────────────────────┘
+                              ▼
+                    ┌─────────────────┐
+                    │  Cloudflare     │
+                    │    Tunnel       │
+                    │ (Hotspot Mode)  │
+                    └─────────────────┘
 ```
 
-## 🚀 **RX Node Services**
+## 💡 Erweiterte Funktionen
 
-### 🧠 **LLM-Server (Port 8001)**
-- **Zweck**: Hauptaufgabe - Verarbeitung großer Sprachmodelle
-- **Hardware**: Optimiert für AMD RX 6700 XT
-- **Modelle**: DialoGPT-large (erweiterbar)
-- **API**: REST-API für Text-Generation
+### Wake-on-LAN
 
-### 🌐 **Web-Interface (Port 8080)**
-- **Zweck**: Request Handler und Benutzeroberfläche
-- **Funktionen**: 
-  - Empfängt Anfragen
-  - Koordiniert mit M1 Audio-Services
-  - Zeigt Systemstatus
-- **Endpoints**: 
-  - M1 STT: `http://192.168.100.1:8002`
-  - M1 TTS: `http://192.168.100.1:8003`
+Die RX Node unterstützt Wake-on-LAN und kann vom M1 Mac aus aufgeweckt werden:
 
-### 🔗 **Mesh-Coordinator (Port 8004)**
-- **Zweck**: Nebula-Mesh-Verbindung zum M1
-- **Port**: 4243/UDP (RX Node)
-- **Verbindung**: 192.168.100.1:4242 (M1 Lighthouse)
-
-## 🔧 **Installation & Start**
-
-### 1. **System vorbereiten**
 ```bash
-cd /home/amo9n11/Documents/Archives/gentleman
+# Direkt mit wakeonlan
+wakeonlan 30:9c:23:5f:44:a8
+
+# Über M1 Control Script
+./m1_rx_node_control.sh wakeup
+
+# Über API
+curl -X POST http://localhost:8765/admin/rx-node/wakeup \
+     -H "Content-Type: application/json" \
+     -d '{"source": "Manual Test"}'
 ```
 
-### 2. **Services starten**
-```bash
-# Alle RX Node Services starten
-docker-compose up -d
+### Automatische Integration
 
-# Status überprüfen
-docker-compose ps
-```
+Das System erkennt automatisch:
+- Netzwerk-Modi (Home vs. Hotspot)
+- Verfügbare Steuerungsmethoden (SSH vs. API)
+- Node-Status und Erreichbarkeit
 
-### 3. **Discovery Service starten**
-```bash
-# Discovery Service auf Port 8007
-python3 discovery_service.py &
-```
+## ✅ Erfolgskriterien
 
-## 📊 **Service-Status überprüfen**
+Nach erfolgreichem Setup sollten folgende Funktionen verfügbar sein:
 
-### **Health Checks**
-```bash
-# LLM-Server
-curl http://localhost:8001/health
+- [x] SSH-Zugriff: `ssh rx-node`
+- [x] RX Node Status: `./m1_rx_node_control.sh status`
+- [x] Remote Shutdown: `./m1_rx_node_control.sh shutdown`
+- [x] Wake-on-LAN: `./m1_rx_node_control.sh wakeup`
+- [x] M1 API Endpoints für RX Node
+- [x] Automatische Netzwerk-Erkennung
+- [x] Sichere SSH-Konfiguration
+- [x] Firewall-Schutz
 
-# Web-Interface
-curl http://localhost:8080/health
+Das GENTLEMAN System ist jetzt vollständig integriert mit dem M1 Mac als zentralem Knotenpunkt! 🎉 
 
-# Log-Aggregator
-curl http://localhost:8005/health
+## ✅ Erfolgskriterien
 
-# Prometheus
-curl http://localhost:9090/-/healthy
+Nach erfolgreichem Setup sollten folgende Funktionen verfügbar sein:
 
-# Discovery Service
-curl http://localhost:8007/health
-```
+- [x] SSH-Zugriff: `ssh rx-node`
+- [x] RX Node Status: `./m1_rx_node_control.sh status`
+- [x] Remote Shutdown: `./m1_rx_node_control.sh shutdown`
+- [x] Wake-on-LAN: `./m1_rx_node_control.sh wakeup`
+- [x] M1 API Endpoints für RX Node
+- [x] Automatische Netzwerk-Erkennung
+- [x] Sichere SSH-Konfiguration
+- [x] Firewall-Schutz
 
-### **Docker Status**
-```bash
-docker-compose ps --format table
-```
-
-## 🌐 **Nebula Mesh Verbindung**
-
-### **RX Node Konfiguration**
-- **IP**: 192.168.100.10
-- **Port**: 4243/UDP
-- **Lighthouse**: 192.168.100.1:4242
-- **Interface**: nebula1
-
-### **Verbindung testen**
-```bash
-# Nebula Status
-sudo nebula-cert print -path nebula/rx.crt
-
-# Ping M1 über Mesh
-ping 192.168.100.1
-
-# Mesh Interface prüfen
-ip addr show nebula1
-```
-
-## 🔄 **Workflow: Audio-Request-Verarbeitung**
-
-```
-1. 🎤 Audio → M1 STT Service (192.168.100.1:8002)
-2. 📝 Text → RX Node LLM Server (192.168.100.10:8001)
-3. 🧠 Processing → AMD RX 6700 XT
-4. 📤 Response → M1 TTS Service (192.168.100.1:8003)
-5. 🔊 Audio Output
-```
-
-## 📈 **Monitoring & Logs**
-
+Das GENTLEMAN System ist jetzt vollständig integriert mit dem M1 Mac als zentralem Knotenpunkt! 🎉 
 ### **Prometheus Metriken**
 - URL: http://localhost:9090
 - RX Node Metriken: GPU, CPU, Memory

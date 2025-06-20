@@ -29,10 +29,12 @@ logging.basicConfig(
 
 class I7HandshakeClient:
     def __init__(self):
-        # M1 Handshake Server Konfiguration
-        self.m1_host = "192.168.68.111"  # M1 Mac IP
+        # M1 Handshake Server Konfiguration - mit Cloudflare Tunnel Fallback
+        self.m1_host = "192.168.68.111"  # M1 Mac IP im Heimnetzwerk
+        self.m1_tunnel_url = "https://century-pam-every-trouble.trycloudflare.com"  # Cloudflare Tunnel
         self.handshake_port = 8765
         self.git_port = 9418
+        self.use_tunnel = False  # Wird automatisch auf True gesetzt bei Verbindungsproblemen
         
         # i7 Node Information
         self.node_id = "i7-development-node"
@@ -46,7 +48,7 @@ class I7HandshakeClient:
         # Handshake-Konfiguration
         self.handshake_interval = 30  # Sekunden zwischen Handshakes
         self.max_retries = 3
-        self.timeout = 10
+        self.timeout = 30
         
         # Status
         self.is_running = False
@@ -128,14 +130,32 @@ class I7HandshakeClient:
     
     def test_connectivity(self):
         """Teste Verbindung zum M1 Server"""
+        # Teste zuerst lokale Verbindung
         try:
             response = requests.get(
                 f"http://{self.m1_host}:{self.handshake_port}/health",
                 timeout=5
             )
-            return response.status_code == 200
+            if response.status_code == 200:
+                self.use_tunnel = False
+                return True
         except:
-            return False
+            pass
+        
+        # Fallback: Teste Cloudflare Tunnel
+        try:
+            response = requests.get(
+                f"{self.m1_tunnel_url}/health",
+                timeout=5
+            )
+            if response.status_code == 200:
+                self.use_tunnel = True
+                logging.info("🌐 Verwende Cloudflare Tunnel für M1 Server Verbindung")
+                return True
+        except:
+            pass
+        
+        return False
     
     def send_handshake(self):
         """Sende Handshake zum M1 Server"""
@@ -157,8 +177,16 @@ class I7HandshakeClient:
                 }
             }
             
+            # Wähle URL basierend auf Verbindungsmodus
+            if self.use_tunnel:
+                url = f"{self.m1_tunnel_url}/handshake"
+                logging.info("🌐 Sende Handshake über Cloudflare Tunnel")
+            else:
+                url = f"http://{self.m1_host}:{self.handshake_port}/handshake"
+                logging.info("🏠 Sende Handshake über lokales Netzwerk")
+            
             response = requests.post(
-                f"http://{self.m1_host}:{self.handshake_port}/handshake",
+                url,
                 json=handshake_data,
                 timeout=self.timeout
             )
@@ -264,18 +292,7 @@ class I7HandshakeClient:
     def start_daemon(self):
         """Starte Handshake-Client als Daemon"""
         logging.info("🚀 Starte I7 Handshake Client als Daemon")
-        
-        # Erstelle Thread für Handshake-Loop
-        handshake_thread = threading.Thread(target=self.handshake_loop, daemon=True)
-        handshake_thread.start()
-        
-        try:
-            # Halte Hauptthread am Leben
-            while self.is_running:
-                time.sleep(1)
-        except KeyboardInterrupt:
-            logging.info("Daemon durch Benutzer beendet")
-            self.stop()
+        self.handshake_loop()
     
     def stop(self):
         """Stoppe Handshake-Client"""

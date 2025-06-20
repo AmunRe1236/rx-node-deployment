@@ -1,0 +1,239 @@
+2025-06-20 22:24:59,794 - INFO - 🚀 Handshake Server gestartet auf 0.0.0.0:8765
+2025-06-20 22:24:59,804 - INFO - 📡 Endpoints verfügbar:
+2025-06-20 22:24:59,805 - INFO -    POST /handshake               - Node Registrierung
+2025-06-20 22:24:59,805 - INFO -    GET  /status                  - Cluster Status
+2025-06-20 22:24:59,805 - INFO -    GET  /nodes                   - Aktive Nodes
+2025-06-20 22:24:59,805 - INFO -    GET  /health                  - Health Check
+2025-06-20 22:24:59,805 - INFO -    POST /admin/shutdown          - M1 Mac Remote Shutdown
+2025-06-20 22:24:59,805 - INFO -    POST /admin/bootup            - M1 Mac Remote Bootup (Wake-on-LAN)
+2025-06-20 22:24:59,805 - INFO -    POST /admin/rx-node/shutdown  - RX Node Remote Shutdown
+2025-06-20 22:24:59,805 - INFO -    POST /admin/rx-node/wakeup    - RX Node Wake-on-LAN
+2025-06-20 22:24:59,805 - INFO -    GET  /admin/rx-node/status    - RX Node Status Check
+2025-06-20 22:25:07,822 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:25:13,287 - INFO - 🌐 127.0.0.1 - "GET /status HTTP/1.1" 200 -
+2025-06-20 22:25:19,684 - INFO - 🌐 127.0.0.1 - "GET /nodes HTTP/1.1" 200 -
+2025-06-20 22:25:25,905 - INFO - 📊 RX Node Status-Anfrage von: unknown
+2025-06-20 22:25:26,170 - INFO - ✅ RX Node Status: ONLINE
+2025-06-20 22:25:26,170 - INFO - 🌐 127.0.0.1 - "GET /admin/rx-node/status HTTP/1.1" 200 -
+2025-06-20 22:25:26,170 - INFO - 📡 RX Node Status-Response gesendet an unknown
+2025-06-20 22:25:32,032 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:25:32,049 - INFO - 📊 RX Node Status-Anfrage von: unknown
+2025-06-20 22:25:32,314 - INFO - ✅ RX Node Status: ONLINE
+2025-06-20 22:25:32,314 - INFO - 🌐 127.0.0.1 - "GET /admin/rx-node/status HTTP/1.1" 200 -
+2025-06-20 22:25:32,314 - INFO - 📡 RX Node Status-Response gesendet an unknown
+2025-06-20 22:25:38,833 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:25:38,852 - INFO - 📊 RX Node Status-Anfrage von: unknown
+2025-06-20 22:25:39,207 - INFO - ✅ RX Node Status: ONLINE
+2025-06-20 22:25:39,207 - INFO - 🌐 127.0.0.1 - "GET /admin/rx-node/status HTTP/1.1" 200 -
+2025-06-20 22:25:39,208 - INFO - 📡 RX Node Status-Response gesendet an unknown
+2025-06-20 22:25:59,809 - INFO - 📊 Cluster Status: 0/0 Nodes aktiv
+2025-06-20 22:26:59,813 - INFO - 📊 Cluster Status: 0/0 Nodes aktiv
+2025-06-20 22:27:59,816 - INFO - 📊 Cluster Status: 0/0 Nodes aktiv
+2025-06-20 22:28:04,050 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:28:59,816 - INFO - 📊 Cluster Status: 0/0 Nodes aktiv
+2025-06-20 22:29:59,819 - INFO - 📊 Cluster Status: 0/0 Nodes aktiv
+2025-06-20 22:30:59,820 - INFO - 📊 Cluster Status: 0/0 Nodes aktiv
+2025-06-20 22:31:59,824 - INFO - 📊 Cluster Status: 0/0 Nodes aktiv
+2025-06-20 22:32:55,330 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:32:59,973 - INFO - 📊 Cluster Status: 0/0 Nodes aktiv
+2025-06-20 22:33:59,977 - INFO - 📊 Cluster Status: 0/0 Nodes aktiv
+2025-06-20 22:34:58,422 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:34:59,983 - INFO - 📊 Cluster Status: 0/0 Nodes aktiv
+2025-06-20 22:35:10,285 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:35:10,698 - INFO - ✅ Node 'i7-development-node' registriert/aktualisiert
+2025-06-20 22:35:10,698 - INFO - 🌐 127.0.0.1 - "POST /handshake HTTP/1.1" 200 -
+2025-06-20 22:35:10,699 - INFO - 📡 Handshake von i7-development-node verarbeitet
+2025-06-20 22:35:59,989 - INFO - 📊 Cluster Status: 1/1 Nodes aktiv
+2025-06-20 22:36:59,993 - INFO - 📊 Cluster Status: 1/1 Nodes aktiv
+2025-06-20 22:37:10,135 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:37:10,155 - INFO - 📊 RX Node Status-Anfrage von: unknown
+2025-06-20 22:37:10,434 - INFO - ✅ RX Node Status: ONLINE
+2025-06-20 22:37:10,434 - INFO - 🌐 127.0.0.1 - "GET /admin/rx-node/status HTTP/1.1" 200 -
+2025-06-20 22:37:10,435 - INFO - 📡 RX Node Status-Response gesendet an unknown
+2025-06-20 22:37:37,648 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:37:37,664 - INFO - 📊 RX Node Status-Anfrage von: unknown
+2025-06-20 22:37:37,936 - INFO - ✅ RX Node Status: ONLINE
+2025-06-20 22:37:37,936 - INFO - 🌐 127.0.0.1 - "GET /admin/rx-node/status HTTP/1.1" 200 -
+2025-06-20 22:37:37,937 - INFO - 📡 RX Node Status-Response gesendet an unknown
+2025-06-20 22:37:45,983 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:38:00,000 - INFO - 📊 Cluster Status: 1/1 Nodes aktiv
+2025-06-20 22:39:00,003 - INFO - 📊 Cluster Status: 1/1 Nodes aktiv
+2025-06-20 22:40:00,005 - INFO - 📊 Cluster Status: 1/1 Nodes aktiv
+2025-06-20 22:41:00,009 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:41:00,010 - WARNING - ⚠️ Node 'i7-development-node' offline seit 5.8 Minuten
+2025-06-20 22:42:00,016 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:42:00,016 - WARNING - ⚠️ Node 'i7-development-node' offline seit 6.8 Minuten
+2025-06-20 22:42:45,485 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:43:00,019 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:43:00,019 - WARNING - ⚠️ Node 'i7-development-node' offline seit 7.8 Minuten
+2025-06-20 22:43:39,267 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:43:45,691 - INFO - 🌐 127.0.0.1 - "GET /status HTTP/1.1" 200 -
+2025-06-20 22:43:57,762 - INFO - 🌐 100.96.219.28 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:44:00,024 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:44:00,025 - WARNING - ⚠️ Node 'i7-development-node' offline seit 8.8 Minuten
+2025-06-20 22:44:33,425 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:45:00,029 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:45:00,030 - WARNING - ⚠️ Node 'i7-development-node' offline seit 9.8 Minuten
+2025-06-20 22:46:00,032 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:46:00,032 - WARNING - ⚠️ Node 'i7-development-node' offline seit 10.8 Minuten
+2025-06-20 22:47:00,038 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:47:00,038 - WARNING - ⚠️ Node 'i7-development-node' offline seit 11.8 Minuten
+2025-06-20 22:48:00,045 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:48:00,046 - WARNING - ⚠️ Node 'i7-development-node' offline seit 12.8 Minuten
+2025-06-20 22:49:00,049 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:49:00,049 - WARNING - ⚠️ Node 'i7-development-node' offline seit 13.8 Minuten
+2025-06-20 22:50:00,052 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:50:00,052 - WARNING - ⚠️ Node 'i7-development-node' offline seit 14.8 Minuten
+2025-06-20 22:51:00,055 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:51:00,055 - WARNING - ⚠️ Node 'i7-development-node' offline seit 15.8 Minuten
+2025-06-20 22:51:30,443 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:51:48,847 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:52:00,061 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:52:00,061 - WARNING - ⚠️ Node 'i7-development-node' offline seit 16.8 Minuten
+2025-06-20 22:53:00,066 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:53:00,066 - WARNING - ⚠️ Node 'i7-development-node' offline seit 17.8 Minuten
+2025-06-20 22:54:00,067 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:54:00,067 - WARNING - ⚠️ Node 'i7-development-node' offline seit 18.8 Minuten
+2025-06-20 22:55:00,071 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:55:00,071 - WARNING - ⚠️ Node 'i7-development-node' offline seit 19.8 Minuten
+2025-06-20 22:55:51,981 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:55:55,025 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:55:56,575 - INFO - 🌐 100.96.219.28 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:56:00,073 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:56:00,073 - WARNING - ⚠️ Node 'i7-development-node' offline seit 20.8 Minuten
+2025-06-20 22:56:07,017 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:56:07,760 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 22:56:35,482 - INFO - 🌐 127.0.0.1 - "GET /status HTTP/1.1" 200 -
+2025-06-20 22:57:00,078 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:57:00,079 - WARNING - ⚠️ Node 'i7-development-node' offline seit 21.8 Minuten
+2025-06-20 22:58:00,083 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:58:00,084 - WARNING - ⚠️ Node 'i7-development-node' offline seit 22.8 Minuten
+2025-06-20 22:59:00,089 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 22:59:00,090 - WARNING - ⚠️ Node 'i7-development-node' offline seit 23.8 Minuten
+2025-06-20 23:00:00,095 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:00:00,095 - WARNING - ⚠️ Node 'i7-development-node' offline seit 24.8 Minuten
+2025-06-20 23:01:00,100 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:01:00,101 - WARNING - ⚠️ Node 'i7-development-node' offline seit 25.8 Minuten
+2025-06-20 23:02:00,106 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:02:00,106 - WARNING - ⚠️ Node 'i7-development-node' offline seit 26.8 Minuten
+2025-06-20 23:03:00,112 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:03:00,112 - WARNING - ⚠️ Node 'i7-development-node' offline seit 27.8 Minuten
+2025-06-20 23:04:00,118 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:04:00,118 - WARNING - ⚠️ Node 'i7-development-node' offline seit 28.8 Minuten
+2025-06-20 23:05:00,121 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:05:00,123 - WARNING - ⚠️ Node 'i7-development-node' offline seit 29.8 Minuten
+2025-06-20 23:06:00,126 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:06:00,127 - WARNING - ⚠️ Node 'i7-development-node' offline seit 30.8 Minuten
+2025-06-20 23:07:00,133 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:07:00,134 - WARNING - ⚠️ Node 'i7-development-node' offline seit 31.8 Minuten
+2025-06-20 23:08:00,138 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:08:00,139 - WARNING - ⚠️ Node 'i7-development-node' offline seit 32.8 Minuten
+2025-06-20 23:09:00,143 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:09:00,144 - WARNING - ⚠️ Node 'i7-development-node' offline seit 33.8 Minuten
+2025-06-20 23:10:00,146 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:10:00,146 - WARNING - ⚠️ Node 'i7-development-node' offline seit 34.8 Minuten
+2025-06-20 23:11:00,152 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:11:00,153 - WARNING - ⚠️ Node 'i7-development-node' offline seit 35.8 Minuten
+2025-06-20 23:12:00,160 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:12:00,163 - WARNING - ⚠️ Node 'i7-development-node' offline seit 36.8 Minuten
+2025-06-20 23:13:00,172 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:13:00,172 - WARNING - ⚠️ Node 'i7-development-node' offline seit 37.8 Minuten
+2025-06-20 23:14:00,182 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:14:00,188 - WARNING - ⚠️ Node 'i7-development-node' offline seit 38.8 Minuten
+2025-06-20 23:15:00,199 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:15:00,200 - WARNING - ⚠️ Node 'i7-development-node' offline seit 39.8 Minuten
+2025-06-20 23:16:00,208 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:16:00,210 - WARNING - ⚠️ Node 'i7-development-node' offline seit 40.8 Minuten
+2025-06-20 23:17:00,215 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:17:00,216 - WARNING - ⚠️ Node 'i7-development-node' offline seit 41.8 Minuten
+2025-06-20 23:18:00,154 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:18:00,155 - WARNING - ⚠️ Node 'i7-development-node' offline seit 42.8 Minuten
+2025-06-20 23:19:00,159 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:19:00,159 - WARNING - ⚠️ Node 'i7-development-node' offline seit 43.8 Minuten
+2025-06-20 23:20:00,164 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:20:00,165 - WARNING - ⚠️ Node 'i7-development-node' offline seit 44.8 Minuten
+2025-06-20 23:21:00,168 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:21:00,168 - WARNING - ⚠️ Node 'i7-development-node' offline seit 45.8 Minuten
+2025-06-20 23:22:00,174 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:22:00,175 - WARNING - ⚠️ Node 'i7-development-node' offline seit 46.8 Minuten
+2025-06-20 23:23:00,179 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:23:00,180 - WARNING - ⚠️ Node 'i7-development-node' offline seit 47.8 Minuten
+2025-06-20 23:24:00,183 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:24:00,183 - WARNING - ⚠️ Node 'i7-development-node' offline seit 48.8 Minuten
+2025-06-20 23:25:00,187 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:25:00,187 - WARNING - ⚠️ Node 'i7-development-node' offline seit 49.8 Minuten
+2025-06-20 23:26:00,196 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:26:00,201 - WARNING - ⚠️ Node 'i7-development-node' offline seit 50.8 Minuten
+2025-06-20 23:27:00,213 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:27:00,218 - WARNING - ⚠️ Node 'i7-development-node' offline seit 51.8 Minuten
+2025-06-20 23:28:00,228 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:28:00,229 - WARNING - ⚠️ Node 'i7-development-node' offline seit 52.8 Minuten
+2025-06-20 23:29:00,235 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:29:00,235 - WARNING - ⚠️ Node 'i7-development-node' offline seit 53.8 Minuten
+2025-06-20 23:30:00,246 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:30:00,246 - WARNING - ⚠️ Node 'i7-development-node' offline seit 54.8 Minuten
+2025-06-20 23:31:00,247 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:31:00,248 - WARNING - ⚠️ Node 'i7-development-node' offline seit 55.8 Minuten
+2025-06-20 23:32:00,252 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:32:00,252 - WARNING - ⚠️ Node 'i7-development-node' offline seit 56.8 Minuten
+2025-06-20 23:33:00,243 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:33:00,243 - WARNING - ⚠️ Node 'i7-development-node' offline seit 57.8 Minuten
+2025-06-20 23:34:00,245 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:34:00,246 - WARNING - ⚠️ Node 'i7-development-node' offline seit 58.8 Minuten
+2025-06-20 23:35:00,250 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:35:00,250 - WARNING - ⚠️ Node 'i7-development-node' offline seit 59.8 Minuten
+2025-06-20 23:36:00,251 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:36:00,252 - WARNING - ⚠️ Node 'i7-development-node' offline seit 60.8 Minuten
+2025-06-20 23:36:19,144 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 23:36:19,871 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 23:36:48,503 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 23:36:55,832 - INFO - 🌐 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+2025-06-20 23:37:00,258 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:37:00,258 - WARNING - ⚠️ Node 'i7-development-node' offline seit 61.8 Minuten
+2025-06-20 23:37:03,014 - INFO - 🌐 127.0.0.1 - "GET /status HTTP/1.1" 200 -
+2025-06-20 23:37:31,337 - INFO - 📊 RX Node Status-Anfrage von: unknown
+2025-06-20 23:37:34,357 - WARNING - ⚠️ RX Node Status: SSH FEHLER
+2025-06-20 23:37:34,358 - INFO - 🌐 127.0.0.1 - "GET /admin/rx-node/status HTTP/1.1" 200 -
+2025-06-20 23:37:34,359 - INFO - 📡 RX Node Status-Response gesendet an unknown
+2025-06-20 23:38:00,260 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:38:00,261 - WARNING - ⚠️ Node 'i7-development-node' offline seit 62.8 Minuten
+2025-06-20 23:39:00,266 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:39:00,266 - WARNING - ⚠️ Node 'i7-development-node' offline seit 63.8 Minuten
+2025-06-20 23:40:00,268 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:40:00,268 - WARNING - ⚠️ Node 'i7-development-node' offline seit 64.8 Minuten
+2025-06-20 23:41:00,272 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:41:00,272 - WARNING - ⚠️ Node 'i7-development-node' offline seit 65.8 Minuten
+2025-06-20 23:42:00,277 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:42:00,277 - WARNING - ⚠️ Node 'i7-development-node' offline seit 66.8 Minuten
+2025-06-20 23:43:00,281 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:43:00,283 - WARNING - ⚠️ Node 'i7-development-node' offline seit 67.8 Minuten
+2025-06-20 23:44:00,285 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:44:00,286 - WARNING - ⚠️ Node 'i7-development-node' offline seit 68.8 Minuten
+2025-06-20 23:45:00,291 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:45:00,292 - WARNING - ⚠️ Node 'i7-development-node' offline seit 69.8 Minuten
+2025-06-20 23:46:00,295 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:46:00,295 - WARNING - ⚠️ Node 'i7-development-node' offline seit 70.8 Minuten
+2025-06-20 23:47:00,296 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:47:00,297 - WARNING - ⚠️ Node 'i7-development-node' offline seit 71.8 Minuten
+2025-06-20 23:48:00,298 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:48:00,298 - WARNING - ⚠️ Node 'i7-development-node' offline seit 72.8 Minuten
+2025-06-20 23:49:00,302 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:49:00,303 - WARNING - ⚠️ Node 'i7-development-node' offline seit 73.8 Minuten
+2025-06-20 23:50:00,308 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:50:00,308 - WARNING - ⚠️ Node 'i7-development-node' offline seit 74.8 Minuten
+2025-06-20 23:51:00,310 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:51:00,310 - WARNING - ⚠️ Node 'i7-development-node' offline seit 75.8 Minuten
+2025-06-20 23:52:00,314 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:52:00,314 - WARNING - ⚠️ Node 'i7-development-node' offline seit 76.8 Minuten
+2025-06-20 23:53:00,324 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:53:00,325 - WARNING - ⚠️ Node 'i7-development-node' offline seit 77.8 Minuten
+2025-06-20 23:54:00,334 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:54:00,335 - WARNING - ⚠️ Node 'i7-development-node' offline seit 78.8 Minuten
+2025-06-20 23:55:00,343 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:55:00,343 - WARNING - ⚠️ Node 'i7-development-node' offline seit 79.8 Minuten
+2025-06-20 23:56:00,348 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:56:00,348 - WARNING - ⚠️ Node 'i7-development-node' offline seit 80.8 Minuten
+2025-06-20 23:57:00,354 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:57:00,354 - WARNING - ⚠️ Node 'i7-development-node' offline seit 81.8 Minuten
+2025-06-20 23:58:00,359 - INFO - 📊 Cluster Status: 0/1 Nodes aktiv
+2025-06-20 23:58:00,360 - WARNING - ⚠️ Node 'i7-development-node' offline seit 82.8 Minuten
