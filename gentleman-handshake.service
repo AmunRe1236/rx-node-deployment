@@ -1,0 +1,25 @@
+[Unit]
+Description=GENTLEMAN M1 Auto-Handshake Service
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=amonbaumgartner
+Group=staff
+WorkingDirectory=/Users/amonbaumgartner/Gentleman
+ExecStart=/Users/amonbaumgartner/Gentleman/auto_handshake_setup.sh start
+ExecStop=/Users/amonbaumgartner/Gentleman/auto_handshake_setup.sh stop
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gentleman-handshake
+
+# Environment
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=HOME=/Users/amonbaumgartner
+
+[Install]
+WantedBy=multi-user.target 
